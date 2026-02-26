@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once 'config/config.php';
+require_once __DIR__ . '/config/config.php';
 
 ?>
 <!DOCTYPE html>
@@ -103,7 +103,7 @@ require_once 'config/config.php';
                     </p>
                 </div>
 
-                                        <div class="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
+                <div class="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
                     <span class="text-[10px] font-bold text-slate-500 uppercase">Protocol</span>
                     <p class="text-white font-mono">
                         <?php echo isset($_SERVER['HTTPS']) ? 'HTTPS' : 'HTTP'; ?>

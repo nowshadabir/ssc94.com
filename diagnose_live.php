@@ -24,7 +24,7 @@ echo "PDO MySQL enabled: " . (extension_loaded('pdo_mysql') ? "YES" : "NO") . "<
 
 echo "<h2>3. Loading Config...</h2>";
 try {
-    require_once 'config/config.php';
+    require_once __DIR__ . '/config/config.php';
     echo "Config loaded successfully!<br>";
 } catch (Throwable $e) {
     echo "<b>FATAL ERROR LOADING CONFIG:</b> " . $e->getMessage() . " in " . $e->getFile() . " on line " . $e->getLine() . "<br>";

@@ -3,7 +3,7 @@
  * Public Ticket Verification Page
  * SSC Batch '94
  */
-require_once 'config/config.php';
+require_once __DIR__ . '/config/config.php';
 $ticket = $_GET['t'] ?? '';
 ?>
 <!DOCTYPE html>
@@ -110,7 +110,7 @@ $ticket = $_GET['t'] ?? '';
 
     <script shadow>
         lucide.createIcons();
-        
+
         // Smart Ticket ID extraction (Handles '#' in URL manually typed)
         let ticketId = "<?= $ticket ?>";
         if (!ticketId) {

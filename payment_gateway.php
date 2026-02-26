@@ -5,8 +5,8 @@
  */
 
 session_start();
-require_once 'config/config.php';
-require_once 'config/bkash.php';
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/config/bkash.php';
 
 // Check if user is authenticated
 if (!isset($_SESSION['user_id'])) {
@@ -32,9 +32,9 @@ if (empty($paymentID)) {
 
     <!-- Bkash Scripts -->
     <?php if (BKASH_ENVIRONMENT === 'sandbox'): ?>
-            <script src="https://scripts.sandbox.bka.sh/versions/1.2.0-beta/checkout/bKash-checkout-sandbox.js"></script>
+        <script src="https://scripts.sandbox.bka.sh/versions/1.2.0-beta/checkout/bKash-checkout-sandbox.js"></script>
     <?php else: ?>
-            <script src="https://scripts.pay.bka.sh/versions/1.2.0-beta/checkout/bKash-checkout.js"></script>
+        <script src="https://scripts.pay.bka.sh/versions/1.2.0-beta/checkout/bKash-checkout.js"></script>
     <?php endif; ?>
 </head>
 
