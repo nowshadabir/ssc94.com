@@ -196,6 +196,8 @@ $resultCount = count($results);
 
                 <!-- Nav Piles (Desktop) -->
                 <div class="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/5">
+                    <a href="../../index.html"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Home</a>
                     <a href="find_friend.php"
                         class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-white bg-white/10 transition-all">Find
                         Friends</a>
@@ -245,6 +247,12 @@ $resultCount = count($results);
             <div
                 class="absolute top-24 left-4 right-4 bg-slate-900 border border-white/10 rounded-3xl p-6 shadow-2xl animate-fade-in-down">
                 <div class="grid grid-cols-1 gap-3">
+                    <a href="../../index.html"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-slate-700 hover:text-white transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-slate-400/20 flex items-center justify-center"><i
+                                data-lucide="home" class="w-5 h-5 text-slate-400"></i></div>
+                        Home
+                    </a>
                     <a href="find_friend.php"
                         class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-yellow-400 hover:text-slate-900 transition-all">
                         <div class="w-10 h-10 rounded-xl bg-yellow-400/20 flex items-center justify-center"><i
@@ -399,53 +407,53 @@ $resultCount = count($results);
         <div id="friendsGrid"
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6<?php echo $resultCount > 0 ? '' : ' hidden'; ?>">
             <?php foreach ($results as $friend): ?>
-                    <?php
-                    $photo = $friend['profile_photo'] ?? '';
-                    if ($photo === '') {
-                        $photo = 'https://i.pravatar.cc/150?u=' . $friend['user_id'];
-                    } else {
-                        $isHttp = strpos($photo, 'http://') === 0 || strpos($photo, 'https://') === 0;
-                        if (!$isHttp) {
-                            $photo = '../../assets/uploads/profiles/' . $photo;
-                        }
+                <?php
+                $photo = $friend['profile_photo'] ?? '';
+                if ($photo === '') {
+                    $photo = 'https://i.pravatar.cc/150?u=' . $friend['user_id'];
+                } else {
+                    $isHttp = strpos($photo, 'http://') === 0 || strpos($photo, 'https://') === 0;
+                    if (!$isHttp) {
+                        $photo = '../../assets/uploads/profiles/' . $photo;
                     }
-                    $role = $friend['job_business'] ?? 'Batchmate';
-                    $schoolName = $friend['school_name'] ?? 'Not specified';
-                    $location = trim(($friend['union_upozilla'] ?? '') . ', ' . ($friend['zilla'] ?? ''), ', ');
-                    ?>
-                    <div
-                        class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 friend-card flex flex-col items-center text-center group">
-                        <div class="relative mb-4">
-                            <img src="<?php echo htmlspecialchars($photo); ?>"
-                                alt="<?php echo htmlspecialchars($friend['full_name']); ?>"
-                                class="w-24 h-24 rounded-full object-cover border-4 border-slate-50 group-hover:border-yellow-100 transition-colors">
+                }
+                $role = $friend['job_business'] ?? 'Batchmate';
+                $schoolName = $friend['school_name'] ?? 'Not specified';
+                $location = trim(($friend['union_upozilla'] ?? '') . ', ' . ($friend['zilla'] ?? ''), ', ');
+                ?>
+                <div
+                    class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 friend-card flex flex-col items-center text-center group">
+                    <div class="relative mb-4">
+                        <img src="<?php echo htmlspecialchars($photo); ?>"
+                            alt="<?php echo htmlspecialchars($friend['full_name']); ?>"
+                            class="w-24 h-24 rounded-full object-cover border-4 border-slate-50 group-hover:border-yellow-100 transition-colors">
+                    </div>
+
+                    <h3 class="font-bold text-lg text-slate-800 leading-tight mb-1">
+                        <?php echo htmlspecialchars($friend['full_name']); ?>
+                    </h3>
+                    <p class="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded-full mb-4">
+                        <?php echo htmlspecialchars($role); ?>
+                    </p>
+
+                    <div class="w-full text-left space-y-2 mb-4 bg-slate-50 p-3 rounded-lg">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">School</span>
+                            <span
+                                class="text-xs font-medium text-slate-700 leading-tight"><?php echo htmlspecialchars($schoolName); ?></span>
                         </div>
-
-                        <h3 class="font-bold text-lg text-slate-800 leading-tight mb-1">
-                            <?php echo htmlspecialchars($friend['full_name']); ?>
-                        </h3>
-                        <p class="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded-full mb-4">
-                            <?php echo htmlspecialchars($role); ?>
-                        </p>
-
-                        <div class="w-full text-left space-y-2 mb-4 bg-slate-50 p-3 rounded-lg">
-                            <div class="flex flex-col">
-                                <span class="text-[10px] text-slate-400 font-bold uppercase">School</span>
-                                <span
-                                    class="text-xs font-medium text-slate-700 leading-tight"><?php echo htmlspecialchars($schoolName); ?></span>
-                            </div>
-                            <div class="flex flex-col mt-2">
-                                <span class="text-[10px] text-slate-400 font-bold uppercase">Location</span>
-                                <span
-                                    class="text-xs font-medium text-slate-700"><?php echo htmlspecialchars($location ?: 'Not specified'); ?></span>
-                            </div>
-                            <div class="flex flex-col mt-2">
-                                <span class="text-[10px] text-slate-400 font-bold uppercase">Mobile</span>
-                                <span
-                                    class="text-xs font-medium text-slate-700"><?php echo htmlspecialchars($friend['mobile'] ?? ''); ?></span>
-                            </div>
+                        <div class="flex flex-col mt-2">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">Location</span>
+                            <span
+                                class="text-xs font-medium text-slate-700"><?php echo htmlspecialchars($location ?: 'Not specified'); ?></span>
+                        </div>
+                        <div class="flex flex-col mt-2">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase">Mobile</span>
+                            <span
+                                class="text-xs font-medium text-slate-700"><?php echo htmlspecialchars($friend['mobile'] ?? ''); ?></span>
                         </div>
                     </div>
+                </div>
             <?php endforeach; ?>
         </div>
 

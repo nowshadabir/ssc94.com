@@ -9,10 +9,7 @@
 header('Content-Type: application/json');
 require_once '../../config/config.php';
 
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-    exit;
-}
+checkAdminAction('edit_reunions');
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['success' => false, 'message' => 'POST only']);
     exit;

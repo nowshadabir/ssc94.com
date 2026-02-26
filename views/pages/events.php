@@ -158,6 +158,8 @@ if (file_exists($configPath)) {
 
                 <!-- Nav Piles (Desktop) -->
                 <div class="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/5">
+                    <a href="../../index.html"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Home</a>
                     <a href="find_friend.php"
                         class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Find
                         Friends</a>
@@ -207,6 +209,12 @@ if (file_exists($configPath)) {
             <div
                 class="absolute top-24 left-4 right-4 bg-slate-900 border border-white/10 rounded-3xl p-6 shadow-2xl animate-fade-in-down">
                 <div class="grid grid-cols-1 gap-3">
+                    <a href="../../index.html"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-slate-700 hover:text-white transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-slate-400/20 flex items-center justify-center"><i
+                                data-lucide="home" class="w-5 h-5 text-slate-400"></i></div>
+                        Home
+                    </a>
                     <a href="find_friend.php"
                         class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-yellow-400 hover:text-slate-900 transition-all">
                         <div class="w-10 h-10 rounded-xl bg-yellow-400/20 flex items-center justify-center"><i

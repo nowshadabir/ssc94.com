@@ -9,10 +9,7 @@ require_once '../../config/config.php';
 
 header('Content-Type: application/json');
 
-// Security Check: Only admins allowed
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
-    jsonResponse(false, 'Unauthorized access');
-}
+checkAdminAction('mark_as_paid');
 
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

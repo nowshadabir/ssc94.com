@@ -7,9 +7,10 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-require_once '../../config/database.php';
+require_once '../../config/config.php';
 
 try {
+    checkAdminAction('manage_users');
     $db = new Database();
     $conn = $db->getConnection();
 

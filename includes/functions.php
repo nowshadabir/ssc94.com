@@ -40,6 +40,54 @@ function isLoggedIn()
 }
 
 /**
+ * Check if admin is logged in and has required permissions
+ */
+function requireAdmin($permission = null)
+{
+    if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+        header("Location: ../auth/admin_login.html");
+        exit();
+    }
+
+    if ($permission && !hasPermission($permission)) {
+        header("Location: dashboard.php?error=unauthorized");
+        exit();
+    }
+}
+
+/**
+ * Check if current admin has a specific permission
+ */
+function hasPermission($permission)
+{
+    if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+        return false;
+    }
+
+    // Super admin has all permissions
+    if (isset($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin') {
+        return true;
+    }
+
+    $permissions = $_SESSION['admin_permissions'] ?? [];
+    return in_array($permission, $permissions);
+}
+
+/**
+ * API check for admin permissions - returns JSON error if unauthorized
+ */
+function checkAdminAction($permission = null)
+{
+    if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+        jsonResponse(false, 'Unauthorized. Please log in again.');
+    }
+
+    if ($permission && !hasPermission($permission)) {
+        jsonResponse(false, 'Unauthorized. You do not have permission for this action.');
+    }
+}
+
+/**
  * Redirect to URL
  */
 function redirect($url)

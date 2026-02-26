@@ -24,7 +24,7 @@ try {
     $conn = $db->getConnection();
 
     // Fetch admin by email
-    $stmt = $conn->prepare("SELECT admin_id, full_name, password_hash, role, status FROM admins WHERE email = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT admin_id, full_name, password_hash, role, status, permissions FROM admins WHERE email = ? LIMIT 1");
     $stmt->execute([$email]);
     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -42,6 +42,7 @@ try {
         $_SESSION['admin_id'] = $admin['admin_id'];
         $_SESSION['admin_name'] = $admin['full_name'];
         $_SESSION['admin_role'] = $admin['role'];
+        $_SESSION['admin_permissions'] = $admin['permissions'] ? json_decode($admin['permissions'], true) : [];
         $_SESSION['is_admin'] = true;
 
         // Update last login

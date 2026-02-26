@@ -1041,6 +1041,7 @@ try {
                 <span class="nav-title">SSC BATCH <span>'94</span></span>
             </div>
             <div class="nav-links">
+                <a href="../index.html">Home</a>
                 <a href="pages/find_friend.php">Find Friends</a>
                 <a href="pages/events.php">Events</a>
                 <a href="pages/soon.html">Donations</a>
@@ -1065,6 +1066,7 @@ try {
     <div id="mobile-menu">
         <div class="mobile-overlay" onclick="toggleMenu()"></div>
         <div class="mobile-panel">
+            <a href="../index.html"><i data-lucide="home" style="width:16px;height:16px;"></i> Home</a>
             <a href="pages/find_friend.php"><i data-lucide="users" style="width:16px;height:16px;"></i> Find Friends</a>
             <a href="pages/events.php"><i data-lucide="calendar" style="width:16px;height:16px;"></i> Events</a>
             <a href="pages/soon.html"><i data-lucide="heart" style="width:16px;height:16px;"></i>

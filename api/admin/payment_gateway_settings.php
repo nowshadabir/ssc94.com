@@ -4,17 +4,15 @@
  * SSC Batch '94
  */
 
-session_start();
 require_once '../../config/config.php';
 
-header('Content-Type: application/json');
-
-// Check if admin is logged in (you may need to adjust this based on your admin auth system)
-if (!isset($_SESSION['admin_id']) && !isset($_SESSION['user_id'])) {
-    jsonResponse(false, 'Unauthorized access');
-}
-
 $action = sanitize($_POST['action'] ?? $_GET['action'] ?? '');
+
+if (in_array($action, ['get_gateways', 'get_active_gateway'])) {
+    checkAdminAction('view_payments');
+} else {
+    checkAdminAction('manage_payments');
+}
 
 try {
     $db = new Database();
