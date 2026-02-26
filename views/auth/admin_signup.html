@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Registration | SSC Batch '94</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .auth-container {
+            max-width: 450px;
+        }
+
+        .input-focus:focus {
+            outline: none;
+            border-color: #0f172a;
+            box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.1);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
+
+    <!-- Header -->
+    <div class="mb-10 text-center">
+        <div
+            class="inline-flex items-center justify-center w-12 h-12 bg-slate-900 text-white rounded-xl font-bold text-xl mb-4">
+            94</div>
+        <h1 class="text-2xl font-bold text-slate-900">Admin Registration</h1>
+        <p class="text-slate-500 mt-2">Create a secure system administrator account</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="auth-container w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <form id="adminSignupForm" class="space-y-6">
+
+            <!-- Profile Image -->
+            <div class="flex flex-col items-center">
+                <div class="relative group">
+                    <div
+                        class="w-20 h-20 rounded-full bg-slate-50 border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden hover:border-slate-400 transition-colors cursor-pointer">
+                        <img id="imagePreview" src="" class="hidden w-full h-full object-cover">
+                        <i data-lucide="plus" id="uploadIcon" class="w-6 h-6 text-slate-400"></i>
+                    </div>
+                    <input type="file" id="adminPhoto" name="admin_photo" accept="image/*"
+                        class="absolute inset-0 opacity-0 cursor-pointer" onchange="previewImage(event)">
+                </div>
+                <label class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest text-center">Profile
+                    Photo</label>
+            </div>
+
+            <!-- Full Name -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-700 uppercase tracking-wider ml-1">Full Name</label>
+                <input type="text" name="full_name" required placeholder="Full Name"
+                    class="w-full h-12 bg-white border border-slate-200 rounded-lg px-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-all font-medium">
+            </div>
+
+            <!-- Role Selection -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-700 uppercase tracking-wider ml-1">Account Role</label>
+                <div class="relative">
+                    <select name="role" required
+                        class="w-full h-12 bg-white border border-slate-200 rounded-lg px-4 text-slate-900 appearance-none focus:outline-none focus:border-slate-900 transition-all font-medium">
+                        <option value="admin">Administrator</option>
+                        <option value="moderator">Moderator</option>
+                        <option value="super_admin">Super Admin</option>
+                    </select>
+                    <i data-lucide="chevron-down"
+                        class="absolute right-4 top-4 w-4 h-4 text-slate-400 pointer-events-none"></i>
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-700 uppercase tracking-wider ml-1">Email Address</label>
+                <input type="email" name="email" required placeholder="admin@domain.com"
+                    class="w-full h-12 bg-white border border-slate-200 rounded-lg px-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-all font-medium">
+            </div>
+
+            <!-- Mobile -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-700 uppercase tracking-wider ml-1">Mobile Number</label>
+                <input type="tel" name="mobile" required placeholder="+880 1XXX XXXXXX"
+                    class="w-full h-12 bg-white border border-slate-200 rounded-lg px-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-all font-medium">
+            </div>
+
+            <!-- Password -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-700 uppercase tracking-wider ml-1">Security
+                    Password</label>
+                <input type="password" name="password" required placeholder="••••••••"
+                    class="w-full h-12 bg-white border border-slate-200 rounded-lg px-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-all font-medium">
+            </div>
+
+            <!-- Submit -->
+            <button type="submit"
+                class="w-full h-12 bg-slate-900 hover:bg-black text-white font-bold rounded-lg transition-all flex items-center justify-center space-x-2">
+                <span>Create Admin Account</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Login Link -->
+            <div class="text-center pt-2">
+                <p class="text-sm text-slate-500">
+                    Existing administrator? <a href="admin_login.html"
+                        class="text-slate-900 font-bold hover:underline">Sign In</a>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-12 text-center text-slate-400 text-xs font-medium uppercase tracking-[0.2em]">
+        System Portal v1.0 &bull; SSC Batch '94
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const output = document.getElementById('imagePreview');
+                const icon = document.getElementById('uploadIcon');
+                output.src = reader.result;
+                output.classList.remove('hidden');
+                icon.classList.add('hidden');
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        document.getElementById('adminSignupForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>';
+            lucide.createIcons();
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('../../api/auth/admin_register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(result.message);
+                    window.location.href = 'admin_login.html';
+                } else {
+                    alert(result.message || 'Error occurred');
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+                console.error(error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Children's Scholarship - SSC Batch '94</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Custom Theme Configuration */
+        :root {
+            --primary-navy: #0f172a;
+            --accent-gold: #fbbf24;
+            --bkash-pink: #e2136e;
+            --nagad-orange: #f6921e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Righteous', cursive;
+        }
+
+        /* Payment Method Transitions */
+        .payment-option {
+            transition: all 0.3s ease;
+            opacity: 0.6;
+            filter: grayscale(100%);
+        }
+
+        .payment-option.active {
+            opacity: 1;
+            filter: grayscale(0%);
+            transform: scale(1.05);
+            border-width: 2px;
+        }
+
+        .bkash-btn.active {
+            border-color: var(--bkash-pink);
+            box-shadow: 0 4px 14px 0 rgba(226, 19, 110, 0.39);
+        }
+
+        .nagad-btn.active {
+            border-color: var(--nagad-orange);
+            box-shadow: 0 4px 14px 0 rgba(246, 146, 30, 0.39);
+        }
+
+        /* Gateway Modal Animations */
+        .gateway-slide-up {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .pin-input {
+            -webkit-text-security: disc;
+        }
+
+        /* Mobile Menu Animation */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body class="antialiased text-slate-800 flex flex-col min-h-screen">
+
+    <!-- PREMIUM MINIMAL NAVBAR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div
+                class="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl px-6 h-16 flex items-center justify-between shadow-2xl shadow-slate-900/50">
+
+                <!-- Brand -->
+                <div class="flex items-center gap-3 cursor-pointer group"
+                    onclick="window.location.href='../../index.html'">
+                    <div
+                        class="w-10 h-10 flex items-center justify-center bg-yellow-400 text-slate-900 rounded-xl font-black text-xl tracking-tighter transform group-hover:-rotate-12 transition-all duration-500 shadow-lg shadow-yellow-400/20">
+                        94</div>
+                    <div class="hidden sm:flex flex-col leading-none">
+                        <span class="text-white font-extrabold tracking-tight text-lg">SSC BATCH <span
+                                class="text-yellow-400">'94</span></span>
+                        <span class="text-[9px] text-slate-400 uppercase tracking-[0.2em] font-bold">Friends For
+                            Friends</span>
+                    </div>
+                </div>
+
+                <!-- Nav Piles (Desktop) -->
+                <div class="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/5">
+                    <a href="find_friend.php"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Find
+                        Friends</a>
+                    <a href="events.php"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Events</a>
+                    <a href="soon.html"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Donations</a>
+                </div>
+
+                <!-- Profile & Actions -->
+                <div class="flex items-center gap-3">
+                    <div id="auth-desktop" class="flex items-center gap-3">
+                        <a href="../auth/login.html" id="login-link"
+                            class="bg-white text-slate-900 px-5 py-2 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 hover:shadow-lg hover:shadow-yellow-400/30 transition-all duration-300">
+                            Login
+                        </a>
+                        <div id="profile-dropdown"
+                            class="hidden flex items-center gap-2 bg-white/5 pl-1 pr-4 py-1 rounded-full border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                            onclick="window.location.href='../profile.php'">
+                            <img id="profile-photo" src="https://i.pravatar.cc/300?u=guest"
+                                class="w-8 h-8 rounded-full border-2 border-yellow-400/50">
+                            <span id="profile-name" class="text-xs font-bold text-white tracking-wide">Member</span>
+                        </div>
+                    </div>
+
+                    <div class="w-px h-6 bg-white/10 mx-1 hidden sm:block"></div>
+
+                    <button id="logout-btn-nav"
+                        class="hidden w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 group"
+                        title="Logout" onclick="window.location.href='../../api/auth/logout.php'">
+                        <i data-lucide="power" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                    </button>
+
+                    <!-- Mobile Menu Trigger -->
+                    <button onclick="toggleMenu()"
+                        class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-slate-400 hover:text-white transition-all">
+                        <i data-lucide="menu" id="icon-menu" class="w-6 h-6"></i>
+                        <i data-lucide="x" id="icon-close" class="hidden w-6 h-6 text-red-400"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW MOBILE OVERLAY MENU -->
+        <div id="mobile-menu" class="hidden fixed inset-0 z-40">
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onclick="toggleMenu()"></div>
+            <div
+                class="absolute top-24 left-4 right-4 bg-slate-900 border border-white/10 rounded-3xl p-6 shadow-2xl animate-fade-in-down">
+                <div class="grid grid-cols-1 gap-3">
+                    <a href="find_friend.php"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-yellow-400 hover:text-slate-900 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-400/20 flex items-center justify-center"><i
+                                data-lucide="users" class="w-5 h-5 text-yellow-400"></i></div>
+                        Find Friends
+                    </a>
+                    <a href="events.php"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-blue-400 hover:text-slate-900 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-blue-400/20 flex items-center justify-center"><i
+                                data-lucide="calendar" class="w-5 h-5 text-blue-400"></i></div>
+                        Events
+                    </a>
+                    <a href="soon.html"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-green-400 hover:text-slate-900 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-green-400/20 flex items-center justify-center"><i
+                                data-lucide="heart" class="w-5 h-5 text-green-400"></i></div>
+                        Donations
+                    </a>
+                    <div class="h-px bg-white/10 my-2"></div>
+                    <div id="mobile-auth-section">
+                        <a href="../auth/login.html" id="login-link-mobile"
+                            class="flex items-center gap-4 p-4 rounded-2xl bg-white text-slate-900 font-bold transition-all">
+                            <i data-lucide="log-in" class="w-5 h-5"></i> Member Login
+                        </a>
+                        <a href="../profile.php" id="profile-link-mobile"
+                            class="hidden flex items-center gap-4 p-4 rounded-2xl bg-slate-800 text-white font-bold transition-all">
+                            <i data-lucide="user" class="w-5 h-5 text-slate-400"></i> My Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="h-24"></div>
+
+    <!-- CONTENT WRAPPER -->
+    <div class="flex-grow max-w-7xl mx-auto px-4 py-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+        <!-- LEFT: DESCRIPTION -->
+        <div>
+            <div
+                class="inline-flex items-center py-1 px-3 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wider mb-6">
+                <i data-lucide="book-open" class="w-4 h-4 mr-2"></i> Education Initiative
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6 brand-font leading-tight">
+                Batch '94 <br /><span class="text-green-600">Children's Scholarship</span>
+            </h1>
+
+            <div class="prose prose-slate text-slate-600 leading-relaxed mb-8">
+                <p class="text-lg">
+                    We believe that the loss of a parent or financial hardship should never cost a child their future.
+                    This dedicated fund ensures that the children of our batchmates can continue their education without
+                    interruption.
+                </p>
+                <div class="bg-slate-50 border-l-4 border-green-500 p-4 my-6 rounded-r-lg">
+                    <h3 class="font-bold text-slate-800 mb-2">How it helps:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-sm">
+                        <li>Covers monthly tuition fees.</li>
+                        <li>Provides annual allowance for books and uniforms.</li>
+                        <li>Supports university admission coaching.</li>
+                    </ul>
+                </div>
+                <p>
+                    Currently supporting <strong class="text-slate-900">12 students</strong> across the country. Your
+                    contribution creates a legacy of knowledge.
+                </p>
+            </div>
+
+            <div class="flex items-center space-x-4 text-sm font-medium text-slate-500">
+                <div class="flex -space-x-2">
+                    <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u=a"
+                        alt="Donor">
+                    <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u=b"
+                        alt="Donor">
+                    <img class="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?u=c"
+                        alt="Donor">
+                </div>
+                <span>Joined by 140+ batchmates</span>
+            </div>
+        </div>
+
+        <!-- RIGHT: MOBILE PAYMENT WIDGET -->
+        <div class="bg-white rounded-3xl shadow-2xl shadow-slate-200 border border-slate-100 overflow-hidden relative">
+            <!-- Header -->
+            <div class="bg-slate-900 p-6 text-center">
+                <h3 class="text-white font-bold text-xl">Secure Donation</h3>
+                <p class="text-slate-400 text-xs mt-1">Via Mobile Banking</p>
+            </div>
+
+            <div class="p-8">
+                <!-- Method Selection -->
+                <div class="flex gap-4 mb-8">
+                    <button onclick="selectMethod('bkash')" id="btn-bkash"
+                        class="payment-option bkash-btn active flex-1 bg-white border border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center h-24 cursor-pointer relative">
+                        <!-- Mock Bkash Logo (Text based for simplicity or SVG placeholder) -->
+                        <div class="font-bold text-[#e2136e] text-xl italic mb-1">bkash</div>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">Personal</span>
+                        <div class="absolute top-2 right-2 text-[#e2136e] check-icon"><i data-lucide="check-circle"
+                                class="w-4 h-4"></i></div>
+                    </button>
+
+                    <button onclick="selectMethod('nagad')" id="btn-nagad"
+                        class="payment-option nagad-btn flex-1 bg-white border border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center h-24 cursor-pointer relative">
+                        <!-- Mock Nagad Logo -->
+                        <div class="font-bold text-[#f6921e] text-xl mb-1">Nagad</div>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase">Merchant</span>
+                        <div class="absolute top-2 right-2 text-[#f6921e] check-icon hidden"><i
+                                data-lucide="check-circle" class="w-4 h-4"></i></div>
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <form onsubmit="processPayment(event)" class="space-y-5">
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Your Phone Number</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-slate-400 font-medium">+880</span>
+                            <input type="tel" required
+                                class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 pl-14 pr-3 font-medium focus:outline-none focus:border-slate-400"
+                                placeholder="1711...">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Donation Amount
+                            (BDT)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-slate-400 font-bold">৳</span>
+                            <input type="number" required
+                                class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 pl-8 pr-3 font-bold text-lg text-slate-800 focus:outline-none focus:border-slate-400"
+                                placeholder="500">
+                        </div>
+                        <div class="flex gap-2 mt-2">
+                            <button type="button" onclick="setAmount(500)"
+                                class="px-2 py-1 text-xs border rounded hover:bg-slate-100">500</button>
+                            <button type="button" onclick="setAmount(1000)"
+                                class="px-2 py-1 text-xs border rounded hover:bg-slate-100">1000</button>
+                            <button type="button" onclick="setAmount(5000)"
+                                class="px-2 py-1 text-xs border rounded hover:bg-slate-100">5000</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Reference
+                            (Optional)</label>
+                        <input type="text"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2.5 px-3 text-sm focus:outline-none focus:border-slate-400"
+                            placeholder="e.g. For Rahim's daughter">
+                    </div>
+
+                    <div id="payment-btn-container" class="pt-2">
+                        <button type="submit" id="pay-btn"
+                            class="w-full bg-[#e2136e] text-white font-bold py-3.5 rounded-xl hover:opacity-90 transition shadow-lg flex justify-center items-center">
+                            Donate via Bkash
+                        </button>
+                        <p class="text-center text-[10px] text-slate-400 mt-3">You will be redirected to the secure
+                            gateway.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOCK PAYMENT GATEWAY OVERLAY -->
+    <div id="paymentGateway"
+        class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <!-- Gateway Container -->
+        <div id="gatewayBox"
+            class="bg-white w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl gateway-slide-up relative">
+
+            <!-- Header (Color changes via JS) -->
+            <div id="gatewayHeader" class="bg-[#e2136e] p-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-3">
+                    <div id="gatewayLogo" class="font-bold italic text-xl">bkash</div>
+                    <div class="h-6 w-px bg-white/30"></div>
+                    <div class="text-xs">
+                        <p class="opacity-80">Merchant</p>
+                        <p class="font-bold">SSC Batch '94</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs opacity-80">Amount</p>
+                    <p class="font-bold text-lg">৳<span id="gatewayAmount">500</span></p>
+                </div>
+            </div>
+
+            <!-- VIEW 1: OTP -->
+            <div id="view-otp" class="p-6">
+                <div class="text-center mb-6">
+                    <i data-lucide="smartphone" class="w-12 h-12 mx-auto text-slate-400 mb-2"></i>
+                    <h3 class="font-bold text-slate-700 text-lg">Enter Verification Code</h3>
+                    <p class="text-xs text-slate-500">We sent a 6-digit code to <span id="gatewayPhone"
+                            class="font-bold text-slate-700"></span></p>
+                </div>
+
+                <input type="text" id="otpInput" maxlength="6"
+                    class="w-full text-center text-2xl tracking-[0.5em] font-bold border-b-2 border-slate-200 py-2 focus:outline-none focus:border-slate-800 mb-8 bg-transparent"
+                    placeholder="000000">
+
+                <div class="flex gap-3">
+                    <button type="button" onclick="closeGateway()"
+                        class="flex-1 py-3 rounded-lg text-slate-500 font-bold hover:bg-slate-50">Cancel</button>
+                    <button type="button" onclick="verifyOTP()"
+                        class="flex-1 bg-slate-900 text-white py-3 rounded-lg font-bold shadow-lg hover:opacity-90">Confirm</button>
+                </div>
+            </div>
+
+            <!-- VIEW 2: PIN -->
+            <div id="view-pin" class="p-6 hidden">
+                <div class="text-center mb-6">
+                    <i data-lucide="lock" class="w-12 h-12 mx-auto text-slate-400 mb-2"></i>
+                    <h3 class="font-bold text-slate-700 text-lg">Enter PIN</h3>
+                    <p class="text-xs text-slate-500">Enter your 4-digit secure PIN to confirm.</p>
+                </div>
+
+                <input type="tel" id="pinInput" maxlength="4"
+                    class="pin-input w-full text-center text-4xl tracking-[0.5em] font-bold border-b-2 border-slate-200 py-2 focus:outline-none focus:border-slate-800 mb-8 bg-transparent"
+                    placeholder="••••">
+
+                <div class="flex gap-3">
+                    <button type="button" onclick="backToOTP()"
+                        class="flex-1 py-3 rounded-lg text-slate-500 font-bold hover:bg-slate-50">Back</button>
+                    <button type="button" onclick="verifyPIN()"
+                        class="flex-1 bg-slate-900 text-white py-3 rounded-lg font-bold shadow-lg hover:opacity-90">Confirm
+                        Payment</button>
+                </div>
+            </div>
+
+            <!-- VIEW 3: SUCCESS -->
+            <div id="view-success" class="p-6 hidden text-center">
+                <div
+                    class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                    <i data-lucide="check" class="w-10 h-10 text-green-600"></i>
+                </div>
+                <h3 class="font-bold text-2xl text-slate-800 mb-1">Payment Successful!</h3>
+                <p class="text-slate-500 text-sm mb-6">Your donation has been received.</p>
+
+                <div class="bg-slate-50 rounded-xl p-4 mb-6 text-left text-sm border border-slate-100">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-slate-400">Trx ID</span>
+                        <span class="font-mono font-bold text-slate-700">9H77G2K9</span>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-slate-400">Time</span>
+                        <span class="font-bold text-slate-700" id="successTime">12:30 PM</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">Amount</span>
+                        <span class="font-bold text-slate-700">৳<span id="successAmount">500</span></span>
+                    </div>
+                </div>
+
+                <button type="button" onclick="closeGateway()"
+                    class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold shadow-lg hover:opacity-90">
+                    Done
+                </button>
+            </div>
+
+            <!-- Loader Overlay (Inside Gateway) -->
+            <div id="gatewayLoader"
+                class="absolute inset-0 bg-white/90 flex flex-col items-center justify-center hidden z-10">
+                <i data-lucide="loader-2" class="w-10 h-10 animate-spin text-slate-800 mb-3"></i>
+                <p class="text-sm font-bold text-slate-600">Processing...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-8 mt-auto border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">&copy; 2026 SSC Batch '94 Association</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        lucide.createIcons();
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            const navContainer = navbar.querySelector('.max-w-7xl');
+            if (window.scrollY > 50) {
+                navContainer.classList.remove('mt-4');
+                navbar.classList.add('bg-slate-900/95');
+            } else {
+                navContainer.classList.add('mt-4');
+                navbar.classList.remove('bg-slate-900/95');
+            }
+        });
+
+        // Auth UI Logic
+        function setAuthUi(isLoggedIn, user) {
+            const loginLink = document.getElementById('login-link');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const logoutBtn = document.getElementById('logout-btn-nav');
+            const loginMobile = document.getElementById('login-link-mobile');
+            const profileMobile = document.getElementById('profile-link-mobile');
+
+            if (isLoggedIn) {
+                if (loginLink) loginLink.classList.add('hidden');
+                if (profileDropdown) profileDropdown.classList.remove('hidden');
+                if (logoutBtn) logoutBtn.classList.remove('hidden');
+                if (loginMobile) loginMobile.classList.add('hidden');
+                if (profileMobile) profileMobile.classList.remove('hidden');
+
+                const profilePhoto = document.getElementById('profile-photo');
+                const profileName = document.getElementById('profile-name');
+
+                if (user?.profile_photo && profilePhoto) {
+                    let photoPath = user.profile_photo;
+                    if (!photoPath.startsWith('http')) {
+                        photoPath = photoPath.replace(/^(\.\.\/|\.\/|\/)/, '');
+                        photoPath = '../../' + photoPath;
+                    }
+                    profilePhoto.src = photoPath;
+                }
+                if (user?.name && profileName) {
+                    profileName.textContent = user.name.split(' ')[0];
+                }
+            } else {
+                if (loginLink) loginLink.classList.remove('hidden');
+                if (profileDropdown) profileDropdown.classList.add('hidden');
+                if (logoutBtn) logoutBtn.classList.add('hidden');
+                if (loginMobile) loginMobile.classList.remove('hidden');
+                if (profileMobile) profileMobile.classList.add('hidden');
+            }
+        }
+
+        async function loadSession() {
+            try {
+                const response = await fetch('../../api/auth/session.php', { credentials: 'same-origin' });
+                const payload = await response.json();
+                const data = payload?.data;
+                setAuthUi(!!data?.logged_in, data);
+                lucide.createIcons();
+            } catch (error) {
+                setAuthUi(false, null);
+            }
+        }
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const iconMenu = document.getElementById('icon-menu');
+            const iconClose = document.getElementById('icon-close');
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                iconMenu.classList.add('hidden');
+                iconClose.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.add('hidden');
+                iconMenu.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        loadSession();
+
+        let currentMethod = 'bkash';
+
+        // ... existing selectMethod and setAmount functions ...
+        function selectMethod(method) {
+            currentMethod = method;
+            const btnBkash = document.getElementById('btn-bkash');
+            const btnNagad = document.getElementById('btn-nagad');
+            const payBtn = document.getElementById('pay-btn');
+
+            // Reset
+            btnBkash.classList.remove('active');
+            btnNagad.classList.remove('active');
+            btnBkash.querySelector('.check-icon').classList.add('hidden');
+            btnNagad.querySelector('.check-icon').classList.add('hidden');
+
+            if (method === 'bkash') {
+                btnBkash.classList.add('active');
+                btnBkash.querySelector('.check-icon').classList.remove('hidden');
+                payBtn.className = "w-full bg-[#e2136e] text-white font-bold py-3.5 rounded-xl hover:opacity-90 transition shadow-lg flex justify-center items-center";
+                payBtn.innerText = "Donate via Bkash";
+            } else {
+                btnNagad.classList.add('active');
+                btnNagad.querySelector('.check-icon').classList.remove('hidden');
+                payBtn.className = "w-full bg-[#f6921e] text-white font-bold py-3.5 rounded-xl hover:opacity-90 transition shadow-lg flex justify-center items-center";
+                payBtn.innerText = "Donate via Nagad";
+            }
+        }
+
+        function setAmount(val) {
+            document.querySelector('input[type="number"]').value = val;
+        }
+
+        // --- GATEWAY LOGIC ---
+
+        function processPayment(e) {
+            e.preventDefault();
+
+            // Get Data
+            const phone = document.querySelector('input[type="tel"]').value;
+            const amount = document.querySelector('input[type="number"]').value;
+
+            if (!phone || !amount) {
+                alert("Please fill in phone and amount");
+                return;
+            }
+
+            // Setup Gateway UI
+            const header = document.getElementById('gatewayHeader');
+            const logo = document.getElementById('gatewayLogo');
+
+            if (currentMethod === 'bkash') {
+                header.style.backgroundColor = '#e2136e';
+                logo.innerText = 'bkash';
+            } else {
+                header.style.backgroundColor = '#f6921e';
+                logo.innerText = 'Nagad';
+            }
+
+            document.getElementById('gatewayAmount').innerText = amount;
+            document.getElementById('gatewayPhone').innerText = phone;
+            document.getElementById('successAmount').innerText = amount;
+
+            // Show Gateway
+            document.getElementById('paymentGateway').classList.remove('hidden');
+            document.getElementById('view-otp').classList.remove('hidden');
+            document.getElementById('view-pin').classList.add('hidden');
+            document.getElementById('view-success').classList.add('hidden');
+
+            // Clear Inputs
+            document.getElementById('otpInput').value = '';
+            document.getElementById('pinInput').value = '';
+
+            // Auto Focus
+            setTimeout(() => document.getElementById('otpInput').focus(), 100);
+        }
+
+        function showLoader(callback) {
+            const loader = document.getElementById('gatewayLoader');
+            loader.classList.remove('hidden');
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                callback();
+            }, 1000);
+        }
+
+        function verifyOTP() {
+            const otp = document.getElementById('otpInput').value;
+            if (otp.length < 4) { // Lenient check
+                alert("Please enter a valid OTP");
+                return;
+            }
+
+            showLoader(() => {
+                document.getElementById('view-otp').classList.add('hidden');
+                document.getElementById('view-pin').classList.remove('hidden');
+                document.getElementById('pinInput').focus();
+            });
+        }
+
+        function backToOTP() {
+            document.getElementById('view-pin').classList.add('hidden');
+            document.getElementById('view-otp').classList.remove('hidden');
+        }
+
+        function verifyPIN() {
+            const pin = document.getElementById('pinInput').value;
+            if (pin.length < 4) {
+                alert("Please enter your PIN");
+                return;
+            }
+
+            showLoader(() => {
+                const now = new Date();
+                document.getElementById('successTime').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                document.getElementById('view-pin').classList.add('hidden');
+                document.getElementById('view-success').classList.remove('hidden');
+
+                // Trigger Confetti (Simulated via Lucide refresh for now, or just UI)
+                lucide.createIcons();
+            });
+        }
+
+        function closeGateway() {
+            document.getElementById('paymentGateway').classList.add('hidden');
+            document.querySelector('form').reset();
+        }
+    </script>
+</body>
+
+</html>

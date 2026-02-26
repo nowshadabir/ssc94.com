@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - SSC Batch '94</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Custom Theme Configuration */
+        :root {
+            --primary-navy: #0f172a;
+            --accent-gold: #fbbf24;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Righteous', cursive;
+        }
+
+        .mono-font {
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox {
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-checkbox:checked {
+            transform: translateX(24px);
+            border-color: #ef4444;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #ef4444;
+        }
+
+        /* ID Card Hologram Effect */
+        .hologram {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-200%) rotate(-45deg);
+            }
+
+            100% {
+                transform: translateX(200%) rotate(-45deg);
+            }
+        }
+
+        /* Ticket Design */
+        .ticket-rip {
+            background-image: radial-gradient(circle at 0 10px, transparent 8px, white 9px);
+            background-size: 10px 20px;
+            background-position: -10px 0;
+            background-repeat: repeat-y;
+        }
+
+        /* Mobile Menu Animation */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.3s ease-out forwards;
+        }
+    </style>
+    <script>
+        function safeNavigate(url) {
+            try { window.location.href = url; }
+            catch (e) { alert("Navigating to " + url); }
+        }
+    </script>
+</head>
+
+<body class="antialiased text-slate-800 flex flex-col min-h-screen">
+
+    <!-- NAVBAR (Glassmorphism) -->
+    <nav class="bg-slate-900/90 backdrop-blur-md text-white sticky top-0 z-40 border-b border-white/10 transition-all duration-300"
+        id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+
+                <!-- Logo -->
+                <div class="flex items-center flex-shrink-0 cursor-pointer group" onclick="safeNavigate('index.html')">
+                    <div
+                        class="bg-yellow-500 text-slate-900 font-bold p-2 rounded-lg brand-font text-2xl tracking-wider transform group-hover:rotate-3 transition duration-300 shadow-lg shadow-yellow-500/20">
+                        94
+                    </div>
+                    <div class="ml-3">
+                        <span
+                            class="block text-xl font-bold tracking-widest brand-font text-white group-hover:text-yellow-400 transition">SSC
+                            BATCH '94</span>
+                        <span class="block text-[10px] text-slate-400 uppercase tracking-[0.2em]">Friends For
+                            Friends</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-6">
+                        <a href="find_friend.php"
+                            class="text-slate-300 hover:text-yellow-400 font-medium transition px-3 py-2 text-sm uppercase tracking-wide">Find
+                            a Friend</a>
+                        <a href="events.php"
+                            class="text-slate-300 hover:text-yellow-400 font-medium transition px-3 py-2 text-sm uppercase tracking-wide">Events</a>
+                        <a href="soon.html"
+                            class="text-slate-300 hover:text-green-400 font-medium transition px-3 py-2 flex items-center text-sm uppercase tracking-wide group">
+                            <i data-lucide="heart"
+                                class="w-4 h-4 mr-2 text-red-500 transition-transform group-hover:scale-110"></i>
+                            Donation
+                        </a>
+                        <a href="login.html"
+                            class="ml-4 bg-white text-slate-900 px-5 py-2.5 rounded-full font-bold text-sm hover:bg-yellow-400 hover:shadow-lg hover:shadow-yellow-400/30 transition-all duration-300 transform hover:-translate-y-0.5">
+                            Member Login
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button onclick="toggleMenu()"
+                        class="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none transition group">
+                        <i data-lucide="menu" id="icon-menu"
+                            class="w-8 h-8 transition-transform duration-300 group-hover:scale-110"></i>
+                        <i data-lucide="x" id="icon-close"
+                            class="hidden w-8 h-8 transition-transform duration-300 group-hover:rotate-90 text-red-500"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu"
+            class="hidden md:hidden absolute top-20 left-0 w-full bg-slate-900/95 backdrop-blur-md border-b border-white/10 shadow-2xl z-40 origin-top">
+            <div class="px-4 pt-4 pb-6 space-y-2">
+                <a href="find_friend.php"
+                    class="block px-4 py-3 rounded-xl text-base font-medium text-yellow-400 bg-slate-800/50 border border-white/5 shadow-inner">Find
+                    a Friend</a>
+                <a href="events.php"
+                    class="block px-4 py-3 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 flex items-center transition group"><i
+                        data-lucide="party-popper" class="w-5 h-5 mr-3 text-yellow-500"></i> Events</a>
+                <a href="soon.html"
+                    class="block px-4 py-3 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 flex items-center transition group"><i
+                        data-lucide="heart" class="w-5 h-5 mr-3 text-red-500"></i> Donation</a>
+                <a href="login.html"
+                    class="block px-4 py-3 rounded-xl text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 flex items-center transition"><i
+                        data-lucide="user" class="w-5 h-5 mr-3 text-blue-400"></i> Member Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER & COVER -->
+    <div class="relative bg-slate-800 h-48 md:h-64 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800"></div>
+        <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
+            class="absolute inset-0 w-full h-full object-cover opacity-20">
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 pb-20 relative z-10">
+
+        <!-- Edit Mode Toggle Button -->
+        <div class="flex justify-end mb-4">
+            <button onclick="toggleEditMode()" id="editModeBtn"
+                class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex items-center">
+                <i data-lucide="edit-3" class="w-5 h-5 mr-2"></i>
+                <span id="editBtnText">Edit Profile</span>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- LEFT COLUMN: Profile Card -->
+            <div class="lg:col-span-1 space-y-6">
+
+                <!-- ID Card (Digital) -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden relative group">
+                    <div class="h-24 bg-slate-900 relative">
+                        <div
+                            class="absolute top-4 right-4 text-yellow-500 font-bold tracking-widest text-xs brand-font border border-yellow-500 px-2 py-0.5 rounded">
+                            MEMBER ID</div>
+                    </div>
+                    <div class="px-6 pb-6 text-center relative">
+                        <!-- Profile Image -->
+                        <div class="relative -mt-16 mb-4 inline-block">
+                            <img src="https://i.pravatar.cc/300?u=1" alt="Profile" id="profileImage"
+                                class="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover bg-slate-200">
+                            <div class="absolute bottom-2 right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-white"
+                                title="Online"></div>
+
+                            <!-- Edit Image Button (Hidden by default) -->
+                            <div id="imageEditBtn"
+                                class="hidden absolute inset-0 bg-black/50 rounded-full flex items-center justify-center cursor-pointer hover:bg-black/60 transition">
+                                <label for="profileImageInput"
+                                    class="cursor-pointer text-white flex flex-col items-center">
+                                    <i data-lucide="camera" class="w-8 h-8 mb-1"></i>
+                                    <span class="text-xs font-bold">Change</span>
+                                </label>
+                                <input type="file" id="profileImageInput" accept="image/*"
+                                    onchange="previewProfileImage(event)" class="hidden">
+                            </div>
+                        </div>
+
+                        <!-- Name (View/Edit) -->
+                        <div id="nameView">
+                            <h2 class="text-2xl font-bold text-slate-800" id="displayName">Rahim Ahmed</h2>
+                        </div>
+                        <div id="nameEdit" class="hidden mb-4">
+                            <input type="text" id="inputName"
+                                class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg font-bold text-center text-slate-800 focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                placeholder="Full Name">
+                        </div>
+
+                        <!-- Job/Institute (View/Edit) -->
+                        <div id="jobView">
+                            <p class="text-slate-500 text-sm font-medium mb-4"><span id="displayJob">Software
+                                    Engineer</span> @ <span id="displayInstitute">Grameenphone</span></p>
+                        </div>
+                        <div id="jobEdit" class="hidden mb-4 space-y-2">
+                            <input type="text" id="inputJob"
+                                class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm text-center focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                placeholder="Job/Business">
+                            <input type="text" id="inputInstitute"
+                                class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm text-center focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                placeholder="Institute/Working Station">
+                        </div>
+
+                        <!-- Badges -->
+                        <div class="flex justify-center gap-2 mb-6">
+                            <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-1 rounded uppercase"
+                                id="displayLocation">Dhaka</span>
+                            <span
+                                class="bg-yellow-100 text-yellow-700 text-[10px] font-bold px-2 py-1 rounded uppercase">Batch
+                                '94</span>
+                            <span
+                                class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-1 rounded uppercase"><span
+                                    id="displayBloodGroup">B+</span> Blood</span>
+                        </div>
+
+                        <!-- Info Grid (View/Edit) -->
+                        <div id="infoView"
+                            class="text-left bg-slate-50 rounded-xl p-4 space-y-3 text-sm border border-slate-100">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">School</span>
+                                <span class="font-bold text-slate-700 text-right" id="displaySchool">Dhaka
+                                    Residential</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">District</span>
+                                <span class="font-bold text-slate-700" id="displayZilla">Dhaka</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Upozilla</span>
+                                <span class="font-bold text-slate-700" id="displayUpozilla">Dhanmondi</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Email</span>
+                                <span class="font-bold text-slate-700" id="displayEmail">rahim@gmail.com</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Mobile</span>
+                                <span class="font-bold text-slate-700" id="displayMobile">01711-XXXXXX</span>
+                            </div>
+                        </div>
+
+                        <!-- Edit Form (Hidden by default) -->
+                        <div id="infoEdit"
+                            class="hidden text-left bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-4 space-y-3 text-sm border-2 border-purple-200">
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">Email *</label>
+                                <input type="email" id="inputEmail"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                    placeholder="you@example.com">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">Mobile *</label>
+                                <input type="tel" id="inputMobile"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                    placeholder="01711-XXXXXX" pattern="[0-9]{11}" maxlength="11">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">Blood Group *</label>
+                                <select id="inputBloodGroup"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200">
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">Current Location
+                                    *</label>
+                                <input type="text" id="inputCurrentLocation"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                    placeholder="e.g. Dhaka, Bangladesh">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">School Name *</label>
+                                <input type="text" id="inputSchool"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                    placeholder="e.g. Dhaka Residential Model College">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">Zilla (District)
+                                    *</label>
+                                <input type="text" id="inputZilla"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                    placeholder="e.g. Dhaka">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">Union/Upozilla *</label>
+                                <input type="text" id="inputUpozilla"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                    placeholder="e.g. Dhanmondi">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">Father's Name</label>
+                                <input type="text" id="inputFatherName"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                    placeholder="Optional">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">Mother's Name</label>
+                                <input type="text" id="inputMotherName"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                    placeholder="Optional">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-xs font-bold text-slate-700 uppercase">Permanent Address
+                                    *</label>
+                                <input type="text" id="inputPermanentAddress"
+                                    class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                                    placeholder="Village/Area, District">
+                            </div>
+                        </div>
+
+                        <!-- Save/Cancel Buttons (Hidden by default) -->
+                        <div id="editActions" class="hidden mt-6 flex gap-2">
+                            <button onclick="saveProfile()"
+                                class="flex-1 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg font-bold hover:shadow-lg transition flex items-center justify-center text-sm">
+                                <i data-lucide="check" class="w-4 h-4 mr-2"></i> Save Changes
+                            </button>
+                            <button onclick="cancelEdit()"
+                                class="flex-1 py-2 border-2 border-slate-300 text-slate-600 rounded-lg font-bold hover:bg-slate-50 transition text-sm">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blood Donation Settings -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-red-500 relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <div class="bg-red-100 p-2 rounded-lg text-red-600 mr-3">
+                                <i data-lucide="droplet" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-800">Blood Donation</h3>
+                        </div>
+
+                        <!-- Toggle -->
+                        <div
+                            class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="toggle" id="bloodToggle" checked
+                                onclick="toggleDonationStatus()"
+                                class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-300 transition-all duration-300 top-0 left-0" />
+                            <label for="bloodToggle"
+                                class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 cursor-pointer transition-colors duration-300"></label>
+                        </div>
+                    </div>
+                    <p id="donationStatusText" class="text-sm text-slate-600 mb-4">You are currently <strong
+                            class="text-green-600">Available</strong> to donate blood.</p>
+
+                    <!-- Last Donation Date (View/Edit) -->
+                    <div id="donationDateView" class="mb-2">
+                        <p class="text-xs text-slate-400">Last donated: <span class="font-bold text-slate-700"
+                                id="displayLastDonation">15 Aug, 2024</span></p>
+                    </div>
+                    <div id="donationDateEdit" class="hidden space-y-2">
+                        <label class="block text-xs font-bold text-slate-700 uppercase">Last Donation Date</label>
+                        <input type="date" id="inputLastDonation"
+                            class="w-full px-3 py-2 border-2 border-purple-300 rounded-lg text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: Dashboard & History -->
+            <div class="lg:col-span-2 space-y-6">
+
+                <!-- 1. NEXT REUNION STATUS (Priority) -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="bg-slate-900 p-4 flex justify-between items-center text-white">
+                        <h3 class="font-bold flex items-center text-lg">
+                            <i data-lucide="ticket" class="w-5 h-5 mr-2 text-yellow-500"></i> Reunion Ticket: Dec 2024
+                        </h3>
+                        <span
+                            class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Paid
+                            & Confirmed</span>
+                    </div>
+
+                    <!-- Digital Ticket Visual -->
+                    <div class="p-0 md:p-6 bg-slate-50">
+                        <div
+                            class="bg-white border-2 border-slate-200 rounded-xl flex flex-col md:flex-row relative overflow-hidden group hover:border-yellow-400 transition-colors">
+
+                            <!-- Ticket Left -->
+                            <div
+                                class="p-6 flex-1 border-b md:border-b-0 md:border-r-2 border-dashed border-slate-200 relative">
+                                <div
+                                    class="absolute -right-3 top-0 bottom-0 flex flex-col justify-center space-y-2 md:block hidden">
+                                    <div class="w-6 h-6 bg-slate-50 rounded-full -mr-3 mb-4"></div>
+                                    <div class="w-6 h-6 bg-slate-50 rounded-full -mr-3"></div>
+                                </div>
+
+                                <span
+                                    class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 block">Event</span>
+                                <h2 class="text-2xl font-bold text-slate-900 mb-4 brand-font">Grand Reunion 2024</h2>
+
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <p class="text-slate-400 text-xs uppercase font-bold">Date</p>
+                                        <p class="font-bold text-slate-700">15 Dec, 2024</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-xs uppercase font-bold">Venue</p>
+                                        <p class="font-bold text-slate-700">Green View Resort</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-xs uppercase font-bold">T-Shirt</p>
+                                        <p class="font-bold text-slate-700">XL (Men)</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-slate-400 text-xs uppercase font-bold">Guests</p>
+                                        <p class="font-bold text-slate-700">Spouse + 1 Child</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ticket Right (QR) -->
+                            <div class="p-6 md:w-48 bg-slate-50 flex flex-col items-center justify-center text-center">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=SSC94-USER-001"
+                                    alt="QR" class="w-24 h-24 mb-2 mix-blend-multiply">
+                                <p class="text-[10px] text-slate-400 font-mono">TICKET ID</p>
+                                <p class="text-sm font-bold font-mono text-slate-800">#94-8821</p>
+                                <button class="mt-3 text-xs text-blue-600 hover:underline font-bold flex items-center">
+                                    <i data-lucide="download" class="w-3 h-3 mr-1"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. REUNION HISTORY (Timeline) -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="font-bold text-slate-800 mb-6 flex items-center text-lg">
+                        <i data-lucide="history" class="w-5 h-5 mr-2 text-blue-500"></i> Reunion History
+                    </h3>
+
+                    <div class="space-y-6 relative border-l-2 border-slate-100 ml-3 pl-8">
+                        <!-- Item 1 -->
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[41px] top-1 bg-blue-100 border-4 border-white w-6 h-6 rounded-full flex items-center justify-center">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            </span>
+                            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-bold text-slate-800">Silver Jubilee Celebration</h4>
+                                    <span
+                                        class="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded">Attended</span>
+                                </div>
+                                <p class="text-sm text-slate-500 mb-2">Convention Center, Dhaka • 2019</p>
+                                <div class="flex gap-2">
+                                    <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+                                        class="w-12 h-12 rounded object-cover">
+                                    <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
+                                        class="w-12 h-12 rounded object-cover">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="relative">
+                            <span
+                                class="absolute -left-[41px] top-1 bg-slate-200 border-4 border-white w-6 h-6 rounded-full"></span>
+                            <div class="bg-white p-4 rounded-xl border border-slate-100 opacity-75">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-bold text-slate-700">Annual Picnic 2018</h4>
+                                    <span
+                                        class="bg-slate-100 text-slate-500 text-xs font-bold px-2 py-0.5 rounded">Missed</span>
+                                </div>
+                                <p class="text-sm text-slate-500">Gazipur Resort • 2018</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. HUMANITARIAN & ADDA STATS -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Donation Stats -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center">
+                            <i data-lucide="heart-handshake" class="w-5 h-5 mr-2 text-red-500"></i> We Care
+                        </h3>
+                        <div class="text-center py-4">
+                            <span class="block text-3xl font-bold text-slate-900 mb-1">৳ 15,000</span>
+                            <span class="text-xs text-slate-400 uppercase tracking-widest font-bold">Total
+                                Donated</span>
+                        </div>
+                        <div class="mt-4 space-y-2">
+                            <div class="flex justify-between text-xs text-slate-500 border-b border-slate-50 pb-2">
+                                <span>Medical Fund (Tarek)</span>
+                                <span class="font-bold">৳ 5,000</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-slate-500 border-b border-slate-50 pb-2">
+                                <span>Winter Drive 2023</span>
+                                <span class="font-bold">৳ 2,000</span>
+                            </div>
+                        </div>
+                        <button class="w-full mt-4 text-xs font-bold text-red-600 hover:text-red-700">View Donation
+                            History</button>
+                    </div>
+
+                    <!-- Events Stats -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center">
+                            <i data-lucide="coffee" class="w-5 h-5 mr-2 text-yellow-500"></i> Adda Activities
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4 text-center mb-4">
+                            <div class="bg-yellow-50 rounded-xl p-3">
+                                <span class="block text-xl font-bold text-slate-900">12</span>
+                                <span class="text-[10px] text-slate-500 uppercase font-bold">Attended</span>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-3">
+                                <span class="block text-xl font-bold text-slate-900">02</span>
+                                <span class="text-[10px] text-slate-500 uppercase font-bold">Hosted</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 font-medium mb-2">Upcoming:</p>
+                        <div class="flex items-center bg-slate-50 p-2 rounded-lg border border-slate-100">
+                            <div class="bg-white p-2 rounded border border-slate-200 text-center min-w-[40px] mr-3">
+                                <span class="block text-[10px] text-slate-400 font-bold uppercase">DEC</span>
+                                <span class="block text-sm font-bold text-slate-900">15</span>
+                            </div>
+                            <div class="truncate">
+                                <p class="text-sm font-bold text-slate-800 truncate">Friday Evening Tea</p>
+                                <p class="text-xs text-slate-400">Dhanmondi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // User Data Storage
+        let userData = {
+            name: "Rahim Ahmed",
+            email: "rahim@gmail.com",
+            mobile: "01711123456",
+            job: "Software Engineer",
+            institute: "Grameenphone",
+            currentLocation: "Dhaka, Bangladesh",
+            bloodGroup: "B+",
+            schoolName: "Dhaka Residential Model College",
+            zilla: "Dhaka",
+            upozilla: "Dhanmondi",
+            fatherName: "Abdul Ahmed",
+            motherName: "Fatema Ahmed",
+            permanentAddress: "Village: Savar, Dhaka",
+            lastDonation: "2024-08-15",
+            willingToDonate: true,
+            profileImage: "https://i.pravatar.cc/300?u=1"
+        };
+
+        // Load user data on page load
+        function loadUserData() {
+            document.getElementById('displayName').textContent = userData.name;
+            document.getElementById('displayJob').textContent = userData.job;
+            document.getElementById('displayInstitute').textContent = userData.institute;
+            document.getElementById('displayLocation').textContent = userData.currentLocation.split(',')[0];
+            document.getElementById('displayBloodGroup').textContent = userData.bloodGroup;
+            document.getElementById('displaySchool').textContent = userData.schoolName;
+            document.getElementById('displayZilla').textContent = userData.zilla;
+            document.getElementById('displayUpozilla').textContent = userData.upozilla;
+            document.getElementById('displayEmail').textContent = userData.email;
+            document.getElementById('displayMobile').textContent = userData.mobile;
+            document.getElementById('profileImage').src = userData.profileImage;
+
+            const lastDonationDate = new Date(userData.lastDonation);
+            document.getElementById('displayLastDonation').textContent = lastDonationDate.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+
+            document.getElementById('bloodToggle').checked = userData.willingToDonate;
+        }
+
+        // Toggle Edit Mode
+        let isEditMode = false;
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+
+            const editBtn = document.getElementById('editModeBtn');
+            const editBtnText = document.getElementById('editBtnText');
+
+            // Toggle visibility
+            document.getElementById('nameView').classList.toggle('hidden');
+            document.getElementById('nameEdit').classList.toggle('hidden');
+            document.getElementById('jobView').classList.toggle('hidden');
+            document.getElementById('jobEdit').classList.toggle('hidden');
+            document.getElementById('infoView').classList.toggle('hidden');
+            document.getElementById('infoEdit').classList.toggle('hidden');
+            document.getElementById('editActions').classList.toggle('hidden');
+            document.getElementById('imageEditBtn').classList.toggle('hidden');
+            document.getElementById('donationDateView').classList.toggle('hidden');
+            document.getElementById('donationDateEdit').classList.toggle('hidden');
+
+            if (isEditMode) {
+                // Entering edit mode - populate form fields
+                editBtn.className = 'bg-gradient-to-r from-slate-600 to-slate-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all duration-300';
+                editBtnText.textContent = 'Cancel Editing';
+
+                document.getElementById('inputName').value = userData.name;
+                document.getElementById('inputEmail').value = userData.email;
+                document.getElementById('inputMobile').value = userData.mobile;
+                document.getElementById('inputJob').value = userData.job;
+                document.getElementById('inputInstitute').value = userData.institute;
+                document.getElementById('inputCurrentLocation').value = userData.currentLocation;
+                document.getElementById('inputBloodGroup').value = userData.bloodGroup;
+                document.getElementById('inputSchool').value = userData.schoolName;
+                document.getElementById('inputZilla').value = userData.zilla;
+                document.getElementById('inputUpozilla').value = userData.upozilla;
+                document.getElementById('inputFatherName').value = userData.fatherName;
+                document.getElementById('inputMotherName').value = userData.motherName;
+                document.getElementById('inputPermanentAddress').value = userData.permanentAddress;
+                document.getElementById('inputLastDonation').value = userData.lastDonation;
+            } else {
+                // Exiting edit mode without saving
+                editBtn.className = 'bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex items-center';
+                editBtnText.textContent = 'Edit Profile';
+            }
+
+            lucide.createIcons();
+        }
+
+        // Save Profile
+        function saveProfile() {
+            // Validate required fields
+            const name = document.getElementById('inputName').value.trim();
+            const email = document.getElementById('inputEmail').value.trim();
+            const mobile = document.getElementById('inputMobile').value.trim();
+            const job = document.getElementById('inputJob').value.trim();
+            const institute = document.getElementById('inputInstitute').value.trim();
+            const currentLocation = document.getElementById('inputCurrentLocation').value.trim();
+            const bloodGroup = document.getElementById('inputBloodGroup').value;
+            const schoolName = document.getElementById('inputSchool').value.trim();
+            const zilla = document.getElementById('inputZilla').value.trim();
+            const upozilla = document.getElementById('inputUpozilla').value.trim();
+            const permanentAddress = document.getElementById('inputPermanentAddress').value.trim();
+
+            if (!name || !email || !mobile || !job || !institute || !currentLocation || !bloodGroup || !schoolName || !zilla || !upozilla || !permanentAddress) {
+                alert('Please fill in all required fields marked with *');
+                return;
+            }
+
+            // Validate mobile number
+            if (!/^[0-9]{11}$/.test(mobile)) {
+                alert('Mobile number must be exactly 11 digits');
+                return;
+            }
+
+            // Update userData
+            userData.name = name;
+            userData.email = email;
+            userData.mobile = mobile;
+            userData.job = job;
+            userData.institute = institute;
+            userData.currentLocation = currentLocation;
+            userData.bloodGroup = bloodGroup;
+            userData.schoolName = schoolName;
+            userData.zilla = zilla;
+            userData.upozilla = upozilla;
+            userData.fatherName = document.getElementById('inputFatherName').value.trim();
+            userData.motherName = document.getElementById('inputMotherName').value.trim();
+            userData.permanentAddress = permanentAddress;
+            userData.lastDonation = document.getElementById('inputLastDonation').value;
+
+            // In production, send to server
+            // saveToServer(userData);
+
+            // Reload display
+            loadUserData();
+
+            // Exit edit mode
+            toggleEditMode();
+
+            alert('Profile updated successfully!');
+        }
+
+        // Cancel Edit
+        function cancelEdit() {
+            toggleEditMode();
+        }
+
+        // Preview Profile Image
+        function previewProfileImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profileImage').src = e.target.result;
+                    userData.profileImage = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const iconMenu = document.getElementById('icon-menu');
+            const iconClose = document.getElementById('icon-close');
+
+            if (menu.classList.contains('hidden')) {
+                // Open Menu
+                menu.classList.remove('hidden');
+                menu.classList.add('animate-fade-in-down');
+                iconMenu.classList.add('hidden');
+                iconClose.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                // Close Menu
+                menu.classList.add('hidden');
+                menu.classList.remove('animate-fade-in-down');
+                iconMenu.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function toggleDonationStatus() {
+            const toggle = document.getElementById('bloodToggle');
+            const text = document.getElementById('donationStatusText');
+
+            userData.willingToDonate = toggle.checked;
+
+            if (toggle.checked) {
+                text.innerHTML = 'You are currently <strong class="text-green-600">Available</strong> to donate blood.';
+                // In real app: Update DB to set status = Active
+            } else {
+                text.innerHTML = 'You are set to <strong class="text-slate-400">Unavailable</strong>.';
+                // In real app: Update DB to set status = Inactive
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            loadUserData();
+        });
+    </script>
+</body>
+
+</html>

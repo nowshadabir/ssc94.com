@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | SSC Batch '94</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .auth-container {
+            max-width: 400px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
+
+    <!-- Branding -->
+    <div class="mb-10 text-center">
+        <div
+            class="inline-flex items-center justify-center w-12 h-12 bg-slate-900 text-white rounded-xl font-bold text-xl mb-4">
+            94</div>
+        <h1 class="text-2xl font-bold text-slate-900">Admin Control</h1>
+        <p class="text-slate-500 mt-2">Sign in to manage the system</p>
+    </div>
+
+    <!-- Login Card -->
+    <div class="auth-container w-full bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <form id="adminLoginForm" class="space-y-6">
+
+            <!-- Email/Identifier -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-700 uppercase tracking-wider ml-1">Admin Email</label>
+                <div class="relative">
+                    <i data-lucide="mail" class="absolute left-4 top-3.5 w-4 h-4 text-slate-400"></i>
+                    <input type="email" name="email" required placeholder="admin@domain.com"
+                        class="w-full h-12 border border-slate-200 rounded-lg pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-all font-medium">
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="space-y-2">
+                <div class="flex justify-between items-center px-1">
+                    <label class="text-xs font-semibold text-slate-700 uppercase tracking-wider">Password</label>
+                    <a href="#" class="text-[10px] font-bold text-slate-400 hover:text-slate-900 uppercase">Forgot?</a>
+                </div>
+                <div class="relative">
+                    <i data-lucide="lock" class="absolute left-4 top-3.5 w-4 h-4 text-slate-400"></i>
+                    <input type="password" name="password" required placeholder="••••••••"
+                        class="w-full h-12 border border-slate-200 rounded-lg pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-900 transition-all font-medium">
+                </div>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit"
+                class="w-full h-12 bg-slate-900 hover:bg-black text-white font-bold rounded-lg transition-all flex items-center justify-center space-x-2 shadow-lg shadow-slate-900/10">
+                <span>Secure Sign In</span>
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Registration Link -->
+            <div class="text-center pt-2">
+                <p class="text-sm text-slate-500">
+                    New administrator? <a href="admin_signup.html"
+                        class="text-slate-900 font-bold hover:underline">Register</a>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Security Information -->
+    <div class="mt-8 flex items-center space-x-2 text-slate-400">
+        <i data-lucide="shield-lock" class="w-4 h-4"></i>
+        <span class="text-[10px] font-bold uppercase tracking-widest">End-to-End Encrypted Session</span>
+    </div>
+
+    <!-- Global Footer -->
+    <div
+        class="mt-20 text-center text-slate-400 text-xs font-medium uppercase tracking-[0.2em] border-t border-slate-200 pt-8 w-64">
+        SSC Batch '94
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('adminLoginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-white"></i>';
+            lucide.createIcons();
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('../../api/auth/admin_login.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const text = await response.text();
+                try {
+                    const result = JSON.parse(text);
+                    if (result.success) {
+                        alert('Login successful! Redirecting to dashboard...');
+                        window.location.href = '../admin/dashboard.php';
+                    } else {
+                        alert(result.message || 'Invalid credentials');
+                    }
+                } catch (jsonErr) {
+                    console.error('Server response was not JSON:', text);
+                    alert('Server error: The response from the server was invalid.');
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                alert('Connection error. Please check your internet or try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+
+</html>

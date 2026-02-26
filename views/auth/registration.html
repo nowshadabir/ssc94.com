@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register & Join - SSC Batch '94</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Custom Theme Configuration */
+        :root {
+            --primary-navy: #0f172a;
+            --accent-gold: #fbbf24;
+            --bkash-pink: #e2136e;
+            --nagad-orange: #f6921e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand-font {
+            font-family: 'Righteous', cursive;
+        }
+
+        /* Form Input Styling */
+        .form-input {
+            width: 100%;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
+        }
+
+        /* Image Upload Preview */
+        .image-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Gateway Animations */
+        .gateway-slide-up {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .pin-input {
+            -webkit-text-security: disc;
+        }
+
+        /* Mobile Menu Animation */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 0.3s ease-out forwards;
+        }
+    </style>
+
+    <script>
+        // Helper to handle navigation errors in restricted preview environments
+        function safeNavigate(url) {
+            try {
+                window.location.href = url;
+            } catch (e) {
+                console.log("Navigation simulated: " + url);
+                alert("Navigation to " + url + " simulated (Environment restriction).");
+            }
+        }
+    </script>
+</head>
+
+<body class="antialiased text-slate-800 flex flex-col min-h-screen">
+
+    <!-- PREMIUM MINIMAL NAVBAR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div
+                class="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl px-6 h-16 flex items-center justify-between shadow-2xl shadow-slate-900/50">
+
+                <!-- Brand -->
+                <div class="flex items-center gap-3 cursor-pointer group"
+                    onclick="window.location.href='../../index.html'">
+                    <div
+                        class="w-10 h-10 flex items-center justify-center bg-yellow-400 text-slate-900 rounded-xl font-black text-xl tracking-tighter transform group-hover:-rotate-12 transition-all duration-500 shadow-lg shadow-yellow-400/20">
+                        94</div>
+                    <div class="hidden sm:flex flex-col leading-none">
+                        <span class="text-white font-extrabold tracking-tight text-lg">SSC BATCH <span
+                                class="text-yellow-400">'94</span></span>
+                        <span class="text-[9px] text-slate-400 uppercase tracking-[0.2em] font-bold">Friends For
+                            Friends</span>
+                    </div>
+                </div>
+
+                <!-- Nav Piles (Desktop) -->
+                <div class="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/5">
+                    <a href="../pages/find_friend.php"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Find
+                        Friends</a>
+                    <a href="../pages/events.php"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Events</a>
+                    <a href="../pages/soon.html"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Donations</a>
+                </div>
+
+                <!-- Profile & Actions -->
+                <div class="flex items-center gap-3">
+                    <div id="auth-desktop" class="flex items-center gap-3">
+                        <a href="login.html" id="login-link"
+                            class="bg-white text-slate-900 px-5 py-2 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 hover:shadow-lg hover:shadow-yellow-400/30 transition-all duration-300">
+                            Login
+                        </a>
+                        <div id="profile-dropdown"
+                            class="hidden flex items-center gap-2 bg-white/5 pl-1 pr-4 py-1 rounded-full border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                            onclick="window.location.href='../profile.php'">
+                            <img id="profile-photo" src="https://i.pravatar.cc/300?u=guest"
+                                class="w-8 h-8 rounded-full border-2 border-yellow-400/50">
+                            <span id="profile-name" class="text-xs font-bold text-white tracking-wide">Member</span>
+                        </div>
+                    </div>
+
+                    <div class="w-px h-6 bg-white/10 mx-1 hidden sm:block"></div>
+
+                    <button id="logout-btn-nav"
+                        class="hidden w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 group"
+                        title="Logout" onclick="window.location.href='../../api/auth/logout.php'">
+                        <i data-lucide="power" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                    </button>
+
+                    <!-- Mobile Menu Trigger -->
+                    <button onclick="toggleMenu()"
+                        class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-slate-400 hover:text-white transition-all">
+                        <i data-lucide="menu" id="icon-menu" class="w-6 h-6"></i>
+                        <i data-lucide="x" id="icon-close" class="hidden w-6 h-6 text-red-400"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW MOBILE OVERLAY MENU -->
+        <div id="mobile-menu" class="hidden fixed inset-0 z-40">
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onclick="toggleMenu()"></div>
+            <div
+                class="absolute top-24 left-4 right-4 bg-slate-900 border border-white/10 rounded-3xl p-6 shadow-2xl animate-fade-in-down">
+                <div class="grid grid-cols-1 gap-3">
+                    <a href="../pages/find_friend.php"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-yellow-400 hover:text-slate-900 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-400/20 flex items-center justify-center"><i
+                                data-lucide="users" class="w-5 h-5 text-yellow-400"></i></div>
+                        Find Friends
+                    </a>
+                    <a href="../pages/events.php"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-blue-400 hover:text-slate-900 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-blue-400/20 flex items-center justify-center"><i
+                                data-lucide="calendar" class="w-5 h-5 text-blue-400"></i></div>
+                        Events
+                    </a>
+                    <a href="../pages/soon.html"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-green-400 hover:text-slate-900 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-green-400/20 flex items-center justify-center"><i
+                                data-lucide="heart" class="w-5 h-5 text-green-400"></i></div>
+                        Donations
+                    </a>
+                    <div class="h-px bg-white/10 my-2"></div>
+                    <div id="mobile-auth-section">
+                        <a href="login.html" id="login-link-mobile"
+                            class="flex items-center gap-4 p-4 rounded-2xl bg-white text-slate-900 font-bold transition-all">
+                            <i data-lucide="log-in" class="w-5 h-5"></i> Member Login
+                        </a>
+                        <a href="../profile.php" id="profile-link-mobile"
+                            class="hidden flex items-center gap-4 p-4 rounded-2xl bg-slate-800 text-white font-bold transition-all">
+                            <i data-lucide="user" class="w-5 h-5 text-slate-400"></i> My Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="h-24"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-grow max-w-4xl mx-auto px-4 py-12 w-full">
+
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+            <!-- Header -->
+            <div class="bg-slate-900 p-8 text-center relative overflow-hidden">
+                <div
+                    class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10">
+                </div>
+                <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 brand-font">Registration</h1>
+                <p class="text-slate-400">Join the Grand Reunion 2024 & Create your Profile</p>
+            </div>
+
+            <form id="regForm" onsubmit="initiatePayment(event)" class="p-8 md:p-10">
+
+                <!-- Section 1: Identity -->
+                <div class="flex flex-col md:flex-row gap-8 mb-8 items-center md:items-start">
+                    <!-- Image Upload -->
+                    <div class="flex flex-col items-center">
+                        <div class="relative group cursor-pointer mb-3">
+                            <img id="previewImg" src="https://via.placeholder.com/150?text=Upload" alt="Preview"
+                                class="image-preview bg-slate-100">
+                            <div
+                                class="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition rounded-full text-white font-bold text-xs">
+                                Change
+                            </div>
+                            <input type="file" accept="image/*" onchange="previewImage(event)"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" required>
+                        </div>
+                        <span class="text-xs font-bold text-slate-500 uppercase">Profile Photo</span>
+                    </div>
+
+                    <!-- Basic Info -->
+                    <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Full Name</label>
+                            <input type="text" class="form-input" placeholder="e.g. Rahim Ahmed" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">District</label>
+                            <select class="form-input" required>
+                                <option value="">Select District</option>
+                                <option>Dhaka</option>
+                                <option>Chittagong</option>
+                                <option>Sylhet</option>
+                                <option>Rajshahi</option>
+                                <option>Khulna</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">School Name</label>
+                            <input type="text" class="form-input" placeholder="High School Name" required>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-slate-100 mb-8">
+
+                <!-- Section 2: Professional & Personal -->
+                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                    <i data-lucide="briefcase" class="w-5 h-5 mr-2 text-yellow-500"></i> Professional Details
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Profession</label>
+                        <input type="text" class="form-input" placeholder="e.g. Banker / Engineer" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Working Office /
+                            Company</label>
+                        <input type="text" class="form-input" placeholder="e.g. City Bank / Self" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Blood Group</label>
+                        <select class="form-input text-red-600 font-bold" required>
+                            <option value="">Select Blood Group</option>
+                            <option>A+</option>
+                            <option>B+</option>
+                            <option>AB+</option>
+                            <option>O+</option>
+                            <option>A-</option>
+                            <option>B-</option>
+                            <option>AB-</option>
+                            <option>O-</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">T-Shirt Size</label>
+                        <div class="flex gap-2">
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="size" class="peer sr-only">
+                                <div
+                                    class="border border-slate-200 rounded-xl py-3 text-center text-sm font-bold peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 hover:bg-slate-50 transition">
+                                    M</div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="size" class="peer sr-only" checked>
+                                <div
+                                    class="border border-slate-200 rounded-xl py-3 text-center text-sm font-bold peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 hover:bg-slate-50 transition">
+                                    L</div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="size" class="peer sr-only">
+                                <div
+                                    class="border border-slate-200 rounded-xl py-3 text-center text-sm font-bold peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 hover:bg-slate-50 transition">
+                                    XL</div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="size" class="peer sr-only">
+                                <div
+                                    class="border border-slate-200 rounded-xl py-3 text-center text-sm font-bold peer-checked:bg-slate-900 peer-checked:text-white peer-checked:border-slate-900 hover:bg-slate-50 transition">
+                                    XXL</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border-slate-100 mb-8">
+
+                <!-- Section 3: Account Credentials -->
+                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                    <i data-lucide="lock" class="w-5 h-5 mr-2 text-yellow-500"></i> Account Setup
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Mobile Number</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-3 text-slate-400 text-sm font-bold">+880</span>
+                            <input type="tel" name="mobile" class="form-input pl-14" placeholder="1711..." required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Email Address</label>
+                        <input type="email" name="email" class="form-input" placeholder="you@example.com" required>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Referral Code
+                            (Optional)</label>
+                        <div class="relative">
+                            <i data-lucide="gift" class="absolute left-3 top-3 text-slate-400 w-5 h-5"></i>
+                            <input type="text" name="referral_code" class="form-input pl-12"
+                                placeholder="Enter referral code if you have one">
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1">If a friend referred you, enter their code here</p>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Create Password</label>
+                        <input type="password" name="password" class="form-input" placeholder="Min 6 characters"
+                            required>
+                    </div>
+                </div>
+
+                <hr class="border-slate-100 mb-8">
+
+                <!-- Section 4: Event & Payment -->
+                <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-6">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                        <i data-lucide="ticket" class="w-5 h-5 mr-2 text-slate-900"></i> Event Registration
+                    </h3>
+
+                    <div class="flex justify-between items-center mb-4 border-b border-yellow-200 pb-4">
+                        <div>
+                            <p class="font-bold text-slate-700">Alumnus Fee</p>
+                            <p class="text-xs text-slate-500">Mandatory</p>
+                        </div>
+                        <span class="font-bold text-slate-900">৳ 1,000</span>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <p class="font-bold text-slate-700">Extra Guests</p>
+                            <p class="text-xs text-slate-500">Spouse / Children (>5y)</p>
+                        </div>
+                        <div class="flex items-center bg-white rounded-lg border border-yellow-200 px-2 py-1">
+                            <button type="button" onclick="updateTotal(-1)"
+                                class="p-1 hover:bg-slate-100 rounded text-slate-600"><i data-lucide="minus"
+                                    class="w-4 h-4"></i></button>
+                            <input type="text" id="guestCount" value="0" readonly
+                                class="w-8 text-center font-bold text-slate-800 focus:outline-none">
+                            <button type="button" onclick="updateTotal(1)"
+                                class="p-1 hover:bg-slate-100 rounded text-slate-600"><i data-lucide="plus"
+                                    class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t-2 border-slate-900/10">
+                        <span class="text-xl font-bold text-slate-800">Total Payable</span>
+                        <span class="text-2xl font-bold text-slate-900 brand-font">৳ <span
+                                id="totalAmount">1000</span></span>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full mt-6 bg-slate-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-slate-800 shadow-xl transition transform hover:-translate-y-1 flex justify-center items-center">
+                        Pay & Create Account
+                    </button>
+                    <p class="text-center text-xs text-slate-500 mt-3">Secure payment via Bkash/Nagad</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 1. INTRO MODAL (On Load) -->
+    <div id="introModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl text-center gateway-slide-up">
+            <div
+                class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 text-yellow-600">
+                <i data-lucide="user-plus" class="w-8 h-8"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 mb-3">Welcome to Batch '94!</h2>
+            <p class="text-slate-600 mb-8 leading-relaxed">
+                Since this is your first time here, we will use this registration information to <strong>create your
+                    official account</strong> on the website.
+            </p>
+            <button onclick="closeIntroModal()"
+                class="w-full bg-yellow-500 text-slate-900 py-3 rounded-xl font-bold hover:bg-yellow-400 transition shadow-lg">
+                Got it, Let's Start
+            </button>
+        </div>
+    </div>
+
+    <!-- 2. PAYMENT GATEWAY MODAL -->
+    <div id="paymentGateway"
+        class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div id="gatewayBox"
+            class="bg-white w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl gateway-slide-up relative">
+
+            <!-- Header -->
+            <div id="gatewayHeader"
+                class="bg-[#e2136e] p-4 flex justify-between items-center text-white transition-colors duration-300">
+                <div class="flex items-center gap-3">
+                    <div id="gatewayLogo" class="font-bold italic text-xl">bkash</div>
+                    <div class="h-6 w-px bg-white/30"></div>
+                    <div class="text-xs">
+                        <p class="opacity-80">Merchant</p>
+                        <p class="font-bold">SSC Batch '94</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs opacity-80">Amount</p>
+                    <p class="font-bold text-lg">৳<span id="gatewayAmount">1000</span></p>
+                </div>
+            </div>
+
+            <!-- VIEW 1: METHOD SELECT -->
+            <div id="view-method" class="p-6">
+                <h3 class="text-center font-bold text-slate-700 mb-6">Select Payment Method</h3>
+                <div class="space-y-3">
+                    <button onclick="selectGateway('bkash')"
+                        class="w-full border-2 border-slate-100 hover:border-[#e2136e] rounded-xl p-4 flex items-center justify-between group transition">
+                        <span class="font-bold text-slate-700 group-hover:text-[#e2136e]">Bkash</span>
+                        <i data-lucide="smartphone" class="text-slate-400 group-hover:text-[#e2136e]"></i>
+                    </button>
+                    <button onclick="selectGateway('nagad')"
+                        class="w-full border-2 border-slate-100 hover:border-[#f6921e] rounded-xl p-4 flex items-center justify-between group transition">
+                        <span class="font-bold text-slate-700 group-hover:text-[#f6921e]">Nagad</span>
+                        <i data-lucide="smartphone" class="text-slate-400 group-hover:text-[#f6921e]"></i>
+                    </button>
+                </div>
+                <button onclick="closeGateway()"
+                    class="w-full mt-6 text-slate-400 text-sm font-bold hover:text-slate-600">Cancel</button>
+            </div>
+
+            <!-- VIEW 2: OTP -->
+            <div id="view-otp" class="p-6 hidden">
+                <div class="text-center mb-6">
+                    <h3 class="font-bold text-slate-700 text-lg">Enter Verification Code</h3>
+                    <p class="text-xs text-slate-500">Sent to your mobile number</p>
+                </div>
+                <input type="text" id="otpInput" maxlength="6"
+                    class="w-full text-center text-2xl tracking-[0.5em] font-bold border-b-2 border-slate-200 py-2 focus:outline-none focus:border-slate-800 mb-8 bg-transparent"
+                    placeholder="000000">
+                <button onclick="verifyOTP()"
+                    class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold shadow-lg">Confirm</button>
+            </div>
+
+            <!-- VIEW 3: PIN -->
+            <div id="view-pin" class="p-6 hidden">
+                <div class="text-center mb-6">
+                    <h3 class="font-bold text-slate-700 text-lg">Enter PIN</h3>
+                    <p class="text-xs text-slate-500">Enter your secure PIN to confirm.</p>
+                </div>
+                <input type="tel" id="pinInput" maxlength="4"
+                    class="pin-input w-full text-center text-4xl tracking-[0.5em] font-bold border-b-2 border-slate-200 py-2 focus:outline-none focus:border-slate-800 mb-8 bg-transparent"
+                    placeholder="••••">
+                <button onclick="verifyPIN()"
+                    class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold shadow-lg">Confirm Payment</button>
+            </div>
+
+            <!-- VIEW 4: SUCCESS -->
+            <div id="view-success" class="p-6 hidden text-center">
+                <div
+                    class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                    <i data-lucide="check" class="w-10 h-10 text-green-600"></i>
+                </div>
+                <h3 class="font-bold text-xl text-slate-800 mb-1">Registration Complete!</h3>
+                <p class="text-slate-500 text-sm mb-6">Your account has been created successfully.</p>
+                <button onclick="safeNavigate('index.html')"
+                    class="w-full bg-slate-900 text-white py-3 rounded-lg font-bold shadow-lg">
+                    Go to Dashboard
+                </button>
+            </div>
+
+            <!-- Loader -->
+            <div id="gatewayLoader"
+                class="absolute inset-0 bg-white/90 flex flex-col items-center justify-center hidden z-10">
+                <i data-lucide="loader-2" class="w-10 h-10 animate-spin text-slate-800 mb-3"></i>
+                <p class="text-sm font-bold text-slate-600">Processing...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            const navContainer = navbar.querySelector('.max-w-7xl');
+            if (window.scrollY > 50) {
+                navContainer.classList.remove('mt-4');
+                navbar.classList.add('bg-slate-900/95');
+            } else {
+                navContainer.classList.add('mt-4');
+                navbar.classList.remove('bg-slate-900/95');
+            }
+        });
+
+        // Auth UI Logic
+        function setAuthUi(isLoggedIn, user) {
+            const loginLink = document.getElementById('login-link');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const logoutBtn = document.getElementById('logout-btn-nav');
+            const loginMobile = document.getElementById('login-link-mobile');
+            const profileMobile = document.getElementById('profile-link-mobile');
+
+            if (isLoggedIn) {
+                if (loginLink) loginLink.classList.add('hidden');
+                if (profileDropdown) profileDropdown.classList.remove('hidden');
+                if (logoutBtn) logoutBtn.classList.remove('hidden');
+                if (loginMobile) loginMobile.classList.add('hidden');
+                if (profileMobile) profileMobile.classList.remove('hidden');
+
+                const profilePhoto = document.getElementById('profile-photo');
+                const profileName = document.getElementById('profile-name');
+
+                if (user?.profile_photo && profilePhoto) {
+                    let photoPath = user.profile_photo;
+                    if (!photoPath.startsWith('http')) {
+                        photoPath = photoPath.replace(/^(\.\.\/|\.\/|\/)/, '');
+                        photoPath = '../../' + photoPath;
+                    }
+                    profilePhoto.src = photoPath;
+                }
+                if (user?.name && profileName) {
+                    profileName.textContent = user.name.split(' ')[0];
+                }
+            } else {
+                if (loginLink) loginLink.classList.remove('hidden');
+                if (profileDropdown) profileDropdown.classList.add('hidden');
+                if (logoutBtn) logoutBtn.classList.add('hidden');
+                if (loginMobile) loginMobile.classList.remove('hidden');
+                if (profileMobile) profileMobile.classList.add('hidden');
+            }
+        }
+
+        async function loadSession() {
+            try {
+                const response = await fetch('../../api/auth/session.php', { credentials: 'same-origin' });
+                const payload = await response.json();
+                const data = payload?.data;
+                setAuthUi(!!data?.logged_in, data);
+            } catch (error) {
+                setAuthUi(false, null);
+            }
+        }
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const iconMenu = document.getElementById('icon-menu');
+            const iconClose = document.getElementById('icon-close');
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                iconMenu.classList.add('hidden');
+                iconClose.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.add('hidden');
+                iconMenu.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSession();
+            lucide.createIcons();
+        });
+
+        // 1. Intro Modal Logic
+        function closeIntroModal() {
+            document.getElementById('introModal').classList.add('hidden');
+        }
+
+        // 2. Image Preview Logic
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const output = document.getElementById('previewImg');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // 3. Dynamic Pricing Logic
+        const BASE_FEE = 1000;
+        const GUEST_FEE = 500;
+        let currentTotal = 1000;
+
+        function updateTotal(change) {
+            const input = document.getElementById('guestCount');
+            let guests = parseInt(input.value) + change;
+            if (guests < 0) guests = 0;
+            input.value = guests;
+
+            currentTotal = BASE_FEE + (guests * GUEST_FEE);
+            document.getElementById('totalAmount').innerText = currentTotal.toLocaleString();
+            document.getElementById('gatewayAmount').innerText = currentTotal.toLocaleString();
+        }
+
+        // 4. Payment Gateway Logic - UPDATED TO ACTUALLY SUBMIT
+        let selectedMethod = 'rupantorpay';
+
+        async function initiatePayment(e) {
+            e.preventDefault();
+
+            const form = document.getElementById('regForm');
+            const formData = new FormData(form);
+
+            // Show loading
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 inline animate-spin mr-2"></i> Processing...';
+            submitBtn.disabled = true;
+
+            try {
+                // Submit registration
+                const response = await fetch('../../api/auth/register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Registration successful, now initiate payment
+                    const paymentResponse = await fetch('../../api/payment/initiate_payment.php', {
+                        method: 'POST',
+                        credentials: 'same-origin'
+                    });
+
+                    const paymentResult = await paymentResponse.json();
+
+                    if (paymentResult.success && paymentResult.paymentURL) {
+                        // Show success message
+                        alert('Registration successful! Redirecting to payment...');
+
+                        // Redirect to payment gateway
+                        window.location.href = paymentResult.paymentURL;
+                    } else {
+                        alert(paymentResult.message || 'Failed to initiate payment. Please try again.');
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                        lucide.createIcons();
+                    }
+                } else {
+                    alert(result.message || 'Registration failed. Please try again.');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    lucide.createIcons();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                lucide.createIcons();
+            }
+        }
+
+        function closeGateway() {
+            document.getElementById('paymentGateway').classList.add('hidden');
+        }
+
+        function selectGateway(method) {
+            selectedMethod = method;
+            const header = document.getElementById('gatewayHeader');
+            const logo = document.getElementById('gatewayLogo');
+
+            if (method === 'bkash') {
+                header.style.backgroundColor = '#e2136e';
+                logo.innerText = 'bkash';
+            } else {
+                header.style.backgroundColor = '#f6921e';
+                logo.innerText = 'Nagad';
+            }
+
+            // Navigate to OTP
+            document.getElementById('view-method').classList.add('hidden');
+            document.getElementById('view-otp').classList.remove('hidden');
+        }
+
+        function showLoader(cb) {
+            const loader = document.getElementById('gatewayLoader');
+            loader.classList.remove('hidden');
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                cb();
+            }, 1500);
+        }
+
+        function verifyOTP() {
+            const otp = document.getElementById('otpInput').value;
+            if (otp.length < 4) return alert("Enter valid OTP");
+
+            showLoader(() => {
+                document.getElementById('view-otp').classList.add('hidden');
+                document.getElementById('view-pin').classList.remove('hidden');
+            });
+        }
+
+        function verifyPIN() {
+            const pin = document.getElementById('pinInput').value;
+            if (pin.length < 4) return alert("Enter PIN");
+
+            showLoader(() => {
+                document.getElementById('view-pin').classList.add('hidden');
+                document.getElementById('view-success').classList.remove('hidden');
+            });
+        }
+    </script>
+</body>
+
+</html>

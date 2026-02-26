@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Login & Registration - SSC Batch '94</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .brand-font {
+            font-family: 'Righteous', cursive;
+        }
+
+        .form-input {
+            width: 100%;
+            background-color: #f8fafc;
+            /* slate-50 */
+            border: 1px solid #cbd5e1;
+            /* slate-300 */
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            /* indigo-600 */
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 0.75rem;
+            font-weight: 600;
+            color: #475569;
+            /* slate-600 */
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .tab-button.active {
+            color: #4f46e5;
+            /* indigo-600 */
+            border-bottom-color: #4f46e5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 9999;
+            animation: slideIn 0.3s ease-out;
+            min-width: 300px;
+        }
+
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .toast-icon.success {
+            color: #10b981;
+        }
+
+        .toast-icon.error {
+            color: #ef4444;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+    </style>
+
+    <script>
+        // Safe navigation helper
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            const navContainer = navbar.querySelector('.max-w-7xl');
+            if (window.scrollY > 50) {
+                navContainer.classList.remove('mt-4');
+                navbar.classList.add('bg-slate-900/95');
+            } else {
+                navContainer.classList.add('mt-4');
+                navbar.classList.remove('bg-slate-900/95');
+            }
+        });
+
+        // Auth UI Logic
+        function setAuthUi(isLoggedIn, user) {
+            const loginLink = document.getElementById('login-link');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            const logoutBtn = document.getElementById('logout-btn-nav');
+            const loginMobile = document.getElementById('login-link-mobile');
+            const profileMobile = document.getElementById('profile-link-mobile');
+
+            if (isLoggedIn) {
+                if (loginLink) loginLink.classList.add('hidden');
+                if (profileDropdown) profileDropdown.classList.remove('hidden');
+                if (logoutBtn) logoutBtn.classList.remove('hidden');
+                if (loginMobile) loginMobile.classList.add('hidden');
+                if (profileMobile) profileMobile.classList.remove('hidden');
+
+                const profilePhoto = document.getElementById('profile-photo');
+                const profileName = document.getElementById('profile-name');
+
+                if (user?.profile_photo && profilePhoto) {
+                    let photoPath = user.profile_photo;
+                    if (!photoPath.startsWith('http')) {
+                        photoPath = photoPath.replace(/^(\.\.\/|\.\/|\/)/, '');
+                        photoPath = '../../' + photoPath;
+                    }
+                    profilePhoto.src = photoPath;
+                }
+                if (user?.name && profileName) {
+                    profileName.textContent = user.name.split(' ')[0];
+                }
+            } else {
+                if (loginLink) loginLink.classList.remove('hidden');
+                if (profileDropdown) profileDropdown.classList.add('hidden');
+                if (logoutBtn) logoutBtn.classList.add('hidden');
+                if (loginMobile) loginMobile.classList.remove('hidden');
+                if (profileMobile) profileMobile.classList.add('hidden');
+            }
+        }
+
+        async function loadSession() {
+            try {
+                const response = await fetch('../../api/auth/session.php', { credentials: 'same-origin' });
+                const payload = await response.json();
+                const data = payload?.data;
+                setAuthUi(!!data?.logged_in, data);
+            } catch (error) {
+                setAuthUi(false, null);
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const iconMenu = document.getElementById('icon-menu');
+            const iconClose = document.getElementById('icon-close');
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                iconMenu.classList.add('hidden');
+                iconClose.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.add('hidden');
+                iconMenu.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSession();
+            lucide.createIcons();
+        });
+
+        // Toast Notification Function
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <svg class="toast-icon ${type}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    ${type === 'success' ?
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>' :
+                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>'
+                }
+                </svg>
+                <div>
+                    <p class="font-semibold text-slate-900">${type === 'success' ? 'Success!' : 'Error'}</p>
+                    <p class="text-sm text-slate-600">${message}</p>
+                </div>
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</head>
+
+<body class="antialiased text-slate-800 flex flex-col min-h-screen bg-slate-100">
+
+    <!-- PREMIUM MINIMAL NAVBAR -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div
+                class="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl px-6 h-16 flex items-center justify-between shadow-2xl shadow-slate-900/50">
+
+                <!-- Brand -->
+                <div class="flex items-center gap-3 cursor-pointer group"
+                    onclick="window.location.href='../../index.html'">
+                    <div
+                        class="w-10 h-10 flex items-center justify-center bg-yellow-400 text-slate-900 rounded-xl font-black text-xl tracking-tighter transform group-hover:-rotate-12 transition-all duration-500 shadow-lg shadow-yellow-400/20">
+                        94</div>
+                    <div class="hidden sm:flex flex-col leading-none">
+                        <span class="text-white font-extrabold tracking-tight text-lg">SSC BATCH <span
+                                class="text-yellow-400">'94</span></span>
+                        <span class="text-[9px] text-slate-400 uppercase tracking-[0.2em] font-bold">Friends For
+                            Friends</span>
+                    </div>
+                </div>
+
+                <!-- Nav Piles (Desktop) -->
+                <div class="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/5">
+                    <a href="../pages/find_friend.php"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Find
+                        Friends</a>
+                    <a href="../pages/events.php"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Events</a>
+                    <a href="../pages/soon.html"
+                        class="px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all">Donations</a>
+                </div>
+
+                <!-- Profile & Actions -->
+                <div class="flex items-center gap-3">
+                    <div id="auth-desktop" class="flex items-center gap-3">
+                        <a href="login.html" id="login-link"
+                            class="bg-white text-slate-900 px-5 py-2 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 hover:shadow-lg hover:shadow-yellow-400/30 transition-all duration-300">
+                            Login
+                        </a>
+                        <div id="profile-dropdown"
+                            class="hidden flex items-center gap-2 bg-white/5 pl-1 pr-4 py-1 rounded-full border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
+                            onclick="window.location.href='../profile.php'">
+                            <img id="profile-photo" src="https://i.pravatar.cc/300?u=guest"
+                                class="w-8 h-8 rounded-full border-2 border-yellow-400/50">
+                            <span id="profile-name" class="text-xs font-bold text-white tracking-wide">Member</span>
+                        </div>
+                    </div>
+
+                    <div class="w-px h-6 bg-white/10 mx-1 hidden sm:block"></div>
+
+                    <button id="logout-btn-nav"
+                        class="hidden w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 group"
+                        title="Logout" onclick="window.location.href='../../api/auth/logout.php'">
+                        <i data-lucide="power" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                    </button>
+
+                    <!-- Mobile Menu Trigger -->
+                    <button onclick="toggleMenu()"
+                        class="md:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-slate-400 hover:text-white transition-all">
+                        <i data-lucide="menu" id="icon-menu" class="w-6 h-6"></i>
+                        <i data-lucide="x" id="icon-close" class="hidden w-6 h-6 text-red-400"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW MOBILE OVERLAY MENU -->
+        <div id="mobile-menu" class="hidden fixed inset-0 z-40">
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onclick="toggleMenu()"></div>
+            <div
+                class="absolute top-24 left-4 right-4 bg-slate-900 border border-white/10 rounded-3xl p-6 shadow-2xl animate-fade-in-down">
+                <div class="grid grid-cols-1 gap-3">
+                    <a href="../pages/find_friend.php"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-yellow-400 hover:text-slate-900 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-400/20 flex items-center justify-center"><i
+                                data-lucide="users" class="w-5 h-5 text-yellow-400"></i></div>
+                        Find Friends
+                    </a>
+                    <a href="../pages/events.php"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-blue-400 hover:text-slate-900 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-blue-400/20 flex items-center justify-center"><i
+                                data-lucide="calendar" class="w-5 h-5 text-blue-400"></i></div>
+                        Events
+                    </a>
+                    <a href="../pages/soon.html"
+                        class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 text-slate-300 font-bold hover:bg-green-400 hover:text-slate-900 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-green-400/20 flex items-center justify-center"><i
+                                data-lucide="heart" class="w-5 h-5 text-green-400"></i></div>
+                        Donations
+                    </a>
+                    <div class="h-px bg-white/10 my-2"></div>
+                    <div id="mobile-auth-section">
+                        <a href="login.html" id="login-link-mobile"
+                            class="flex items-center gap-4 p-4 rounded-2xl bg-white text-slate-900 font-bold transition-all">
+                            <i data-lucide="log-in" class="w-5 h-5"></i> Member Login
+                        </a>
+                        <a href="../profile.php" id="profile-link-mobile"
+                            class="hidden flex items-center gap-4 p-4 rounded-2xl bg-slate-800 text-white font-bold transition-all">
+                            <i data-lucide="user" class="w-5 h-5 text-slate-400"></i> My Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="h-24"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full bg-white p-8 rounded-2xl shadow-md">
+
+            <!-- Tab Navigation -->
+            <div class="flex border-b border-slate-200 mb-6">
+                <button onclick="switchTab('login')" id="tab-login" class="tab-button active">
+                    Login
+                </button>
+                <button onclick="switchTab('signup')" id="tab-signup" class="tab-button">
+                    Sign Up
+                </button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <div id="content-login" class="tab-content active">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 brand-font">Member Login</h2>
+                    <p class="text-slate-500 text-sm mt-1">Access your account</p>
+                </div>
+
+                <form onsubmit="return handleLogin(event);" class="space-y-5">
+                    <div>
+                        <label for="login-mobile" class="block text-sm font-medium text-slate-700 mb-1">Mobile
+                            Number</label>
+                        <input type="text" id="login-mobile" name="mobile" class="form-input" placeholder="01712345678"
+                            required minlength="11" maxlength="11">
+                    </div>
+
+                    <div>
+                        <label for="login-password"
+                            class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                        <div class="relative">
+                            <input type="password" id="login-password" name="password" class="form-input pr-10"
+                                placeholder="Enter your password" required>
+                            <button type="button" onclick="togglePassword('login-password')"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600">
+                                <i data-lucide="eye" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center">
+                            <input type="checkbox"
+                                class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                            <span class="ml-2 text-sm text-slate-700">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                            Forgot Password?
+                        </a>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full bg-indigo-600 text-white py-2.5 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                        Sign In
+                    </button>
+
+                    <div class="text-center pt-4">
+                        <p class="text-sm text-slate-600">Don't have an account?
+                            <button type="button" onclick="switchTab('signup')"
+                                class="font-semibold text-indigo-600 hover:underline">
+                                Create one
+                            </button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- SIGNUP FORM -->
+            <div id="content-signup" class="tab-content">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900 brand-font">Create Account</h2>
+                    <p class="text-slate-500 text-sm mt-1">Join the SSC '94 community</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mb-8">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-sm font-semibold text-indigo-600">Step <span id="current-step-text">1</span>
+                            of 5</span>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-2">
+                        <div id="progress-bar" class="bg-indigo-600 h-2 rounded-full" style="width: 20%"></div>
+                    </div>
+                </div>
+
+                <form id="signup-form" onsubmit="handleSignup(event)" class="space-y-6">
+
+                    <!-- Step 1: Basic Info -->
+                    <div id="step-1" class="form-step active space-y-4">
+                        <h3 class="text-lg font-semibold border-b pb-2">Basic Information</h3>
+                        <div>
+                            <label for="signup-name" class="block text-sm font-medium text-slate-700 mb-1">Full Name
+                                *</label>
+                            <input type="text" id="signup-name" name="name" class="form-input"
+                                placeholder="e.g. Rahim Ahmed" required>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="signup-mobile" class="block text-sm font-medium text-slate-700 mb-1">Mobile
+                                    *</label>
+                                <input type="text" id="signup-mobile" name="mobile" class="form-input"
+                                    placeholder="01712345678" required minlength="11" maxlength="11">
+                            </div>
+                            <div>
+                                <label for="signup-email" class="block text-sm font-medium text-slate-700 mb-1">Email
+                                    *</label>
+                                <input type="email" id="signup-email" name="email" class="form-input"
+                                    placeholder="example@gmail.com" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Profile Photo *</label>
+                            <input type="file" name="profile_photo" class="form-input" accept="image/*" required>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Personal Info -->
+                    <div id="step-2" class="form-step space-y-4">
+                        <h3 class="text-lg font-semibold border-b pb-2">Personal Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Father's Name</label>
+                                <input type="text" name="father_name" class="form-input" placeholder="Optional">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Mother's Name</label>
+                                <input type="text" name="mother_name" class="form-input" placeholder="Optional">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Blood Group *</label>
+                                <select name="blood_group" class="form-input" required>
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Permanent Address *</label>
+                                <input type="text" name="permanent_address" class="form-input"
+                                    placeholder="Village/Area, District" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Present Info -->
+                    <div id="step-3" class="form-step space-y-4">
+                        <h3 class="text-lg font-semibold border-b pb-2">Present Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Job/Business *</label>
+                                <input type="text" name="job" class="form-input" placeholder="e.g. Software Engineer"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Institute/Working Station
+                                    *</label>
+                                <input type="text" name="institute" class="form-input"
+                                    placeholder="e.g. XYZ Company Ltd." required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Current Location *</label>
+                                <input type="text" name="current_location" class="form-input"
+                                    placeholder="e.g. Dhaka, Bangladesh" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: School Info -->
+                    <div id="step-4" class="form-step space-y-4">
+                        <h3 class="text-lg font-semibold border-b pb-2">School Information (SSC)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">School Name *</label>
+                                <input type="text" name="school_name" class="form-input"
+                                    placeholder="e.g. Dhaka Residential Model College" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Zilla (District) *</label>
+                                <input type="text" name="zilla" class="form-input" placeholder="e.g. Dhaka" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Union/Upozilla *</label>
+                                <input type="text" name="upozilla" class="form-input" placeholder="e.g. Dhanmondi"
+                                    required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Batch *</label>
+                                <input type="text" name="batch" class="form-input bg-slate-200" value="1994" readonly
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Password -->
+                    <div id="step-5" class="form-step space-y-4">
+                        <h3 class="text-lg font-semibold border-b pb-2">Create Password</h3>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Referral Code
+                                (Optional)</label>
+                            <input type="text" name="referral_code" class="form-input"
+                                placeholder="Enter referral code if you have one">
+                            <p class="text-xs text-slate-500 mt-1">If a friend referred you, enter their code here</p>
+                        </div>
+                        <div>
+                            <label for="signup-password" class="block text-sm font-medium text-slate-700 mb-1">Password
+                                *</label>
+                            <div class="relative">
+                                <input type="password" id="signup-password" name="password" class="form-input pr-10"
+                                    placeholder="Min. 6 characters" required minlength="6">
+                                <button type="button" onclick="togglePassword('signup-password')"
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-indigo-600">
+                                    <i data-lucide="eye" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="signup-password-confirm"
+                                class="block text-sm font-medium text-slate-700 mb-1">Confirm Password *</label>
+                            <input type="password" id="signup-password-confirm" name="password_confirm"
+                                class="form-input" placeholder="Re-enter password" required minlength="6">
+                        </div>
+                        <div class="pt-2">
+                            <label class="flex items-center">
+                                <input type="checkbox"
+                                    class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                                    required>
+                                <span class="ml-2 text-sm text-slate-700">I agree to the <a href="#"
+                                        class="font-medium text-indigo-600 hover:underline">Terms &
+                                        Conditions</a>.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="pt-6 flex justify-between gap-4">
+                        <button type="button" id="prev-btn" onclick="prevStep()"
+                            class="bg-slate-200 text-slate-700 py-2.5 px-6 rounded-lg font-semibold hover:bg-slate-300 transition-colors hidden">
+                            Previous
+                        </button>
+                        <button type="button" id="next-btn" onclick="nextStep()"
+                            class="flex-1 bg-indigo-600 text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                            Next
+                        </button>
+                        <button type="submit" id="submit-btn"
+                            class="flex-1 bg-indigo-600 text-white py-2.5 px-6 rounded-lg font-semibold hover:bg-indigo-700 transition-colors hidden">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <div class="text-center pt-2">
+                        <p class="text-sm text-slate-600">Already have an account?
+                            <button type="button" onclick="switchTab('login')"
+                                class="font-semibold text-indigo-600 hover:underline">
+                                Login
+                            </button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-5 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm">&copy; 2026 SSC Batch '94 Association All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const iconMenu = document.getElementById('icon-menu');
+            const iconClose = document.getElementById('icon-close');
+            menu.classList.toggle('hidden');
+            iconMenu.classList.toggle('hidden');
+            iconClose.classList.toggle('hidden');
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            const loginTab = document.getElementById('tab-login');
+            const signupTab = document.getElementById('tab-signup');
+            const loginContent = document.getElementById('content-login');
+            const signupContent = document.getElementById('content-signup');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                signupTab.classList.remove('active');
+                loginContent.classList.add('active');
+                signupContent.classList.remove('active');
+            } else {
+                signupTab.classList.add('active');
+                loginTab.classList.remove('active');
+                signupContent.classList.add('active');
+                loginContent.classList.remove('active');
+                currentStep = 1;
+                showStep(currentStep);
+            }
+            lucide.createIcons();
+        }
+
+        // Password Toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.closest('.relative').querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = 'password';
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        // Handle Login Submit
+        function handleLogin(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const mobile = document.getElementById('login-mobile').value;
+            const password = document.getElementById('login-password').value;
+
+            const formData = new FormData();
+            formData.append('mobile', mobile);
+            formData.append('password', password);
+
+            console.debug('🚀 Login attempt started...', { mobile });
+
+            // Call login API
+            fetch('../../api/auth/login.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(async response => {
+                    const text = await response.text();
+                    console.debug('📡 Raw server response:', text);
+
+                    try {
+                        const data = JSON.parse(text);
+                        console.log('✅ Parsed result:', data);
+
+                        if (data.success) {
+                            showToast('Login successful! Redirecting...', 'success');
+                            setTimeout(() => {
+                                window.location.href = '../profile.php';
+                            }, 1500);
+                        } else {
+                            showToast(data.message || 'Login failed.', 'error');
+                            console.warn('❌ Auth failed:', data.message);
+                        }
+                    } catch (e) {
+                        console.error('💣 JSON Parse Error. Server sent non-JSON:', text);
+                        showToast('Server configuration error. Check console.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('🚨 Network/Fetch Error:', error);
+                    showToast('Connection error. Please try again.', 'error');
+                });
+
+            return false;
+        }
+
+        // Handle Signup Submit - UPDATED FOR RUPANTORPAY
+        async function handleSignup(event) {
+            event.preventDefault();
+            if (!validateStep(currentStep)) return;
+
+            const password = document.getElementById('signup-password').value;
+            const passwordConfirm = document.getElementById('signup-password-confirm').value;
+            if (password !== passwordConfirm) {
+                showToast('Passwords do not match!', 'error');
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = document.getElementById('submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+            try {
+                // Prepare form data
+                const form = document.getElementById('signup-form');
+                const formData = new FormData(form);
+
+                // Submit registration
+                const response = await fetch('../../api/auth/register.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Registration successful! Redirecting to payment...', 'success');
+
+                    // Initiate payment
+                    const paymentResponse = await fetch('../../api/payment/initiate_payment.php', {
+                        method: 'POST',
+                        credentials: 'same-origin'
+                    });
+
+                    const paymentData = await paymentResponse.json();
+
+                    if (paymentData.success && paymentData.paymentURL) {
+                        // Show message and redirect to Rupantorpay
+                        setTimeout(() => {
+                            window.location.href = paymentData.paymentURL;
+                        }, 1000);
+                    } else {
+                        showToast(paymentData.message || 'Payment initiation failed. Please try again.', 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalText;
+                    }
+                } else {
+                    showToast(data.message || 'Registration failed. Please try again.', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast('An error occurred. Please try again.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        }
+
+        // Multi-step form logic
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        function showStep(step) {
+            document.querySelectorAll('.form-step').forEach(el => el.classList.remove('active'));
+            document.querySelector(`#step-${step}`).classList.add('active');
+
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const submitBtn = document.getElementById('submit-btn');
+
+            if (step === 1) {
+                prevBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+            }
+
+            if (step === totalSteps) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+
+            // Update progress bar
+            const progressBar = document.getElementById('progress-bar');
+            const progress = (step / totalSteps) * 100;
+            progressBar.style.width = `${progress}%`;
+            document.getElementById('current-step-text').innerText = step;
+        }
+
+        function nextStep() {
+            if (validateStep(currentStep) && currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        function validateStep(step) {
+            const currentStepElement = document.getElementById(`step-${step}`);
+            const inputs = currentStepElement.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('border-red-500');
+                } else {
+                    input.classList.remove('border-red-500');
+                }
+            });
+            if (!isValid) {
+                alert('Please fill all required fields in this step.');
+            }
+            return isValid;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showStep(currentStep);
+        });
+    </script>
+</body>
+
+</html>
