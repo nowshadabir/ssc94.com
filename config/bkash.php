@@ -4,14 +4,16 @@
  * API Version: 1.2.0-beta
  */
 
+require_once __DIR__ . '/env_loader.php';
+
 // Bkash Credentials (Replace with your actual credentials)
-define('BKASH_APP_KEY', 'your_app_key_here');
-define('BKASH_APP_SECRET', 'your_app_secret_here');
-define('BKASH_USERNAME', 'your_username_here');
-define('BKASH_PASSWORD', 'your_password_here');
+define('BKASH_APP_KEY', getenv('BKASH_APP_KEY') ?: 'your_app_key_here');
+define('BKASH_APP_SECRET', getenv('BKASH_APP_SECRET') ?: 'your_app_secret_here');
+define('BKASH_USERNAME', getenv('BKASH_USERNAME') ?: 'your_username_here');
+define('BKASH_PASSWORD', getenv('BKASH_PASSWORD') ?: 'your_password_here');
 
 // Environment (sandbox or production)
-define('BKASH_ENVIRONMENT', 'sandbox'); // Change to 'production' for live
+define('BKASH_ENVIRONMENT', getenv('BKASH_ENVIRONMENT') ?: 'sandbox'); // Change to 'production' for live
 
 // Base URLs
 if (BKASH_ENVIRONMENT === 'sandbox') {
