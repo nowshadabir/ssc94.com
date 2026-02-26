@@ -41,4 +41,3 @@ function loadEnv($path)
 // Assuming this file is in 'config/' folder, .env is in root
 $envPath = dirname(__DIR__) . '/.env';
 loadEnv($envPath);
-?>

@@ -164,11 +164,10 @@ try {
         'next_step' => 'initiate_payment'
     ]);
 
-} catch (Exception $e) {
-    if ($conn->inTransaction()) {
+} catch (Throwable $e) {
+    if (isset($conn) && $conn->inTransaction()) {
         $conn->rollBack();
     }
     logError('Registration error: ' . $e->getMessage());
-    jsonResponse(false, 'Registration failed. Please try again.');
+    jsonResponse(false, 'Registration failed: ' . $e->getMessage());
 }
-?>

@@ -57,7 +57,7 @@ try {
         jsonResponse(false, 'Invalid credentials');
     }
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
     logError('Admin login error: ' . $e->getMessage());
-    jsonResponse(false, 'An internal server error occurred');
+    jsonResponse(false, 'Admin login error: ' . $e->getMessage());
 }

@@ -214,4 +214,3 @@ function processReferralReward($referredUserId)
         return false;
     }
 }
-?>

@@ -128,8 +128,7 @@ try {
         'redirect' => 'profile.php'
     ]);
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
     logError('Login error: ' . $e->getMessage());
-    jsonResponse(false, 'Login failed. Please try again.');
+    jsonResponse(false, 'Login error: ' . $e->getMessage() . '. Please check server configuration.');
 }
-?>

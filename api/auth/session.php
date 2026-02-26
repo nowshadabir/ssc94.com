@@ -46,8 +46,7 @@ try {
         'profile_photo' => $photo,
         'profile_url' => 'profile.php'
     ]);
-} catch (Exception $e) {
+} catch (Throwable $e) {
     logError('Session check error: ' . $e->getMessage());
-    jsonResponse(false, 'Session check failed', ['logged_in' => false]);
+    jsonResponse(false, 'Session check failed: ' . $e->getMessage(), ['logged_in' => false]);
 }
-?>
