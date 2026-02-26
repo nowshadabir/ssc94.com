@@ -5,7 +5,7 @@
  */
 
 session_start();
-require_once '../../config/config.php';
+require_once dirname(dirname(__DIR__)) . '/config/config.php';
 
 header('Content-Type: application/json');
 
