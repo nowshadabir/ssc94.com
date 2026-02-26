@@ -134,11 +134,11 @@ $adminRole = $_SESSION['admin_role'] ?? 'Admin';
                 class="flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-xl transition text-sm font-medium">
                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Overview
             </a>
-            <a href="user_registrations.html"
+            <a href="user_registrations.php"
                 class="flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-xl transition text-sm font-medium">
                 <i data-lucide="user-plus" class="w-4 h-4"></i> User Registrations
             </a>
-            <a href="payment_gateway_settings.html"
+            <a href="payment_gateway_settings.php"
                 class="flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-xl transition text-sm font-medium">
                 <i data-lucide="credit-card" class="w-4 h-4"></i> Payment Gateway
             </a>
@@ -178,9 +178,15 @@ $adminRole = $_SESSION['admin_role'] ?? 'Admin';
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="openForm(null)"
-                    class="flex items-center gap-2 bg-slate-900 hover:bg-black text-white text-xs font-bold px-4 py-2 rounded-xl transition">
+                    class="flex items-center gap-2 bg-slate-900 hover:bg-black text-white text-xs font-bold px-4 py-2 rounded-xl transition mr-4">
                     <i data-lucide="plus" class="w-4 h-4"></i> New Reunion
                 </button>
+                <div class="text-right hidden sm:block">
+                    <p class="text-xs font-bold text-slate-900"><?php echo htmlspecialchars($adminName); ?></p>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                        <?php echo htmlspecialchars($adminRole); ?>
+                    </p>
+                </div>
                 <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($adminName); ?>&background=0f172a&color=fff&size=80"
                     class="w-9 h-9 rounded-full border-2 border-slate-200" alt="Admin">
             </div>

@@ -104,11 +104,11 @@ $adminRole = $_SESSION['admin_role'] ?? 'Admin';
                 class="flex items-center gap-3 px-4 py-2.5 text-white bg-slate-800 rounded-xl text-sm font-semibold">
                 <i data-lucide="layout-dashboard" class="w-4 h-4 text-yellow-400"></i> Overview
             </a>
-            <a href="user_registrations.html"
+            <a href="user_registrations.php"
                 class="flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-xl transition text-sm font-medium">
                 <i data-lucide="user-plus" class="w-4 h-4"></i> User Registrations
             </a>
-            <a href="payment_gateway_settings.html"
+            <a href="payment_gateway_settings.php"
                 class="flex items-center gap-3 px-4 py-2.5 hover:text-white hover:bg-slate-800 rounded-xl transition text-sm font-medium">
                 <i data-lucide="credit-card" class="w-4 h-4"></i> Payment Gateway
             </a>
