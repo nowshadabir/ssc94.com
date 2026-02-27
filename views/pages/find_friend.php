@@ -13,6 +13,9 @@ if (!file_exists($configPath)) {
 
 require_once $configPath;
 
+// Handle AJAX Search Request for Speed
+$isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
 $district = sanitize($_GET['district'] ?? '');
 $upozilla = sanitize($_GET['upozilla'] ?? '');
 $school = sanitize($_GET['school'] ?? '');
@@ -29,9 +32,10 @@ if ($hasSearch) {
         $where = ["u.status = 'active'"];
         $params = [];
 
+        // Smart Search: Use indices and handle partial matches intelligently
         if ($district !== '') {
             $where[] = 'si.zilla LIKE ?';
-            $params[] = '%' . $district . '%';
+            $params[] = $district . '%'; // Faster prefix search if possible
         }
         if ($upozilla !== '') {
             $where[] = 'si.union_upozilla LIKE ?';
@@ -42,35 +46,51 @@ if ($hasSearch) {
             $params[] = '%' . $school . '%';
         }
         if ($name !== '') {
-            $where[] = 'u.full_name LIKE ?';
-            $params[] = '%' . $name . '%';
+            // Only search by name if it's at least 2 characters to avoid huge scanning
+            if (strlen($name) >= 2) {
+                $where[] = 'u.full_name LIKE ?';
+                $params[] = '%' . $name . '%';
+            }
         }
 
+        // Optimized Query: Joining only necessary fields and using LIMIT
         $sql = "
             SELECT
                 u.user_id,
                 u.full_name,
                 u.mobile,
                 u.profile_photo,
-                MAX(pr.job_business) as job_business,
-                MAX(pr.current_location) as current_location,
-                MAX(si.school_name) as school_name,
-                MAX(si.zilla) as zilla,
-                MAX(si.union_upozilla) as union_upozilla
+                pr.job_business,
+                pr.current_location,
+                si.school_name,
+                si.zilla,
+                si.union_upozilla
             FROM users u
             LEFT JOIN user_present_info pr ON u.user_id = pr.user_id
             LEFT JOIN user_school_info si ON u.user_id = si.user_id
             WHERE " . implode(' AND ', $where) . "
-            GROUP BY u.user_id
             ORDER BY u.full_name ASC
-            LIMIT 200
+            LIMIT 100
         ";
 
         $stmt = $conn->prepare($sql);
         $stmt->execute($params);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // If AJAX, return JSON and exit
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            echo json_encode(['results' => $results, 'count' => count($results)]);
+            exit;
+        }
+
     } catch (Exception $e) {
         logError('Find friend search error: ' . $e->getMessage());
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            echo json_encode(['results' => [], 'count' => 0, 'error' => 'Search failed']);
+            exit;
+        }
         $results = [];
     }
 }
@@ -324,10 +344,11 @@ $resultCount = count($results);
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i data-lucide="map-pin" class="h-4 w-4 text-slate-400"></i>
                     </div>
-                    <input type="text" id="districtInput" name="district"
+                    <input type="text" id="districtInput" name="district" list="zillaList"
                         value="<?php echo htmlspecialchars($district); ?>"
                         class="search-input w-full pl-9 pr-4 py-3 rounded-xl border border-slate-200 text-slate-800 placeholder-slate-400 focus:border-yellow-400 transition bg-slate-50 font-semibold"
                         placeholder="e.g. Dhaka">
+                    <datalist id="zillaList"></datalist>
                 </div>
             </div>
 
@@ -339,10 +360,11 @@ $resultCount = count($results);
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i data-lucide="map" class="h-4 w-4 text-slate-400"></i>
                     </div>
-                    <input type="text" id="upozillaInput" name="upozilla"
+                    <input type="text" id="upozillaInput" name="upozilla" list="upozillaList"
                         value="<?php echo htmlspecialchars($upozilla); ?>"
                         class="search-input w-full pl-9 pr-4 py-3 rounded-xl border border-slate-200 text-slate-800 placeholder-slate-400 focus:border-yellow-400 transition bg-slate-50"
                         placeholder="e.g. Dhanmondi">
+                    <datalist id="upozillaList"></datalist>
                 </div>
             </div>
 
@@ -546,6 +568,122 @@ $resultCount = count($results);
             }
         }
 
+        // Live Search Logic (Smart & Fast)
+        let searchTimeout;
+        const friendsGrid = document.getElementById('friendsGrid');
+        const countBadge = document.getElementById('resultCount');
+        const initialState = document.getElementById('initialState');
+        const emptyState = document.getElementById('emptyState');
+
+        async function performSearch() {
+            const district = document.getElementById('districtInput').value;
+            const upozilla = document.getElementById('upozillaInput').value;
+            const school = document.getElementById('schoolInput').value;
+            const name = document.getElementById('nameInput').value;
+
+            if (!district && !upozilla && !school && !name) {
+                friendsGrid.classList.add('hidden');
+                initialState.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                countBadge.textContent = '0';
+                return;
+            }
+
+            // Visual feedback
+            countBadge.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i>';
+            lucide.createIcons();
+
+            try {
+                const params = new URLSearchParams({ district, upozilla, school, name });
+                const response = await fetch(`find_friend.php?${params.toString()}`, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                const data = await response.json();
+                
+                renderResults(data.results);
+                countBadge.textContent = data.count;
+            } catch (error) {
+                console.error("Search error:", error);
+            }
+        }
+
+        function renderResults(results) {
+            initialState.classList.add('hidden');
+            
+            if (results.length === 0) {
+                friendsGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            friendsGrid.classList.remove('hidden');
+            
+            friendsGrid.innerHTML = results.map(friend => {
+                let photo = friend.profile_photo || '';
+                if (photo === '') {
+                    photo = `https://i.pravatar.cc/150?u=${friend.user_id}`;
+                } else {
+                    if (!photo.startsWith('http')) {
+                        photo = '../../assets/uploads/profiles/' + photo;
+                    }
+                }
+                const role = friend.job_business || 'Batchmate';
+                const schoolName = friend.school_name || 'Not specified';
+                const location = [friend.union_upozilla, friend.zilla].filter(Boolean).join(', ');
+
+                return `
+                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 friend-card flex flex-col items-center text-center group">
+                        <div class="relative mb-4">
+                            <img src="${photo}" alt="${friend.full_name}"
+                                class="w-24 h-24 rounded-full object-cover border-4 border-slate-50 group-hover:border-yellow-100 transition-colors">
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-800 leading-tight mb-1">${friend.full_name}</h3>
+                        <p class="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded-full mb-4">${role}</p>
+                        <div class="w-full text-left space-y-2 mb-4 bg-slate-50 p-3 rounded-lg">
+                            <div class="flex flex-col">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase">School</span>
+                                <span class="text-xs font-medium text-slate-700 leading-tight">${schoolName}</span>
+                            </div>
+                            <div class="flex flex-col mt-2">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase">Location</span>
+                                <span class="text-xs font-medium text-slate-700">${location || 'Not specified'}</span>
+                            </div>
+                            <div class="flex flex-col mt-2">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase">Mobile</span>
+                                <span class="text-xs font-medium text-slate-700">${friend.mobile || ''}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+
+        // Debounced Search Inputs
+        document.querySelectorAll('.search-input').forEach(input => {
+            input.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(performSearch, 400); // 400ms debounce
+            });
+        });
+
+        // Load Suggestions
+        async function loadSuggestions() {
+            try {
+                const response = await fetch('../../api/user/get_locations.php');
+                const locations = await response.json();
+                // Distribute to lists (simplified: put all in both or filter if possible)
+                const upozillaList = document.getElementById('upozillaList');
+                const zillaList = document.getElementById('zillaList');
+                
+                const html = locations.map(loc => `<option value="${loc}">`).join('');
+                upozillaList.innerHTML = html;
+                zillaList.innerHTML = html;
+            } catch (e) {}
+        }
+
         // Mobile Menu Toggle Logic
         function toggleMenu() {
             const menu = document.getElementById('mobile-menu');
@@ -567,7 +705,16 @@ $resultCount = count($results);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadSession);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSession();
+            loadSuggestions();
+            
+            // Prevent form submit reload
+            document.querySelector('form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                performSearch();
+            });
+        });
     </script>
 </body>
 

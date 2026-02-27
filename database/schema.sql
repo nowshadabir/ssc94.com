@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS users (
     INDEX idx_mobile        (mobile),
     INDEX idx_email         (email),
     INDEX idx_status        (status),
+    INDEX idx_full_name     (full_name),
     INDEX idx_referral_code (referral_code),
     INDEX idx_referred_by   (referred_by)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -71,7 +72,9 @@ CREATE TABLE IF NOT EXISTS user_present_info (
     facebook_profile           VARCHAR(500),
     created_at                 TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at                 TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    INDEX idx_working_station (institute_working_station),
+    INDEX idx_cur_location    (current_location)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================================
@@ -90,9 +93,10 @@ CREATE TABLE IF NOT EXISTS user_school_info (
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    INDEX idx_school (school_name),
-    INDEX idx_zilla  (zilla),
-    INDEX idx_batch  (batch_year)
+    INDEX idx_school   (school_name),
+    INDEX idx_zilla    (zilla),
+    INDEX idx_upozilla (union_upozilla),
+    INDEX idx_batch    (batch_year)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================================
