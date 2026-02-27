@@ -14,6 +14,11 @@ $testType = $_GET['type'] ?? 'admin';
 
 echo "<div style='background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;'>";
 echo "<strong>Testing:</strong> $testEmail ($testType)<br>";
+
+// Check if .env is actually loading by testing a unique key
+$envExists = file_exists(__DIR__ . '/.env');
+echo "<strong>.env Status:</strong> " . ($envExists ? "<span style='color:green'>Found</span>" : "<span style='color:red'>NOT FOUND (Upload your .env file!)</span>") . "<br>";
+
 echo "<strong>Tip:</strong> Add ?email=your@email.com&type=user to the URL to test others.";
 echo "</div>";
 
