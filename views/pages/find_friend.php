@@ -396,11 +396,17 @@ $resultCount = count($results);
                 </div>
             </div>
 
-            <!-- 5. Search Button -->
-            <div class="w-full md:w-2/12 pt-6 md:pt-5">
-                <button type="submit"
-                    class="w-full bg-yellow-500 text-slate-900 font-bold py-3 rounded-xl hover:bg-yellow-400 transition shadow-lg shadow-yellow-500/30 flex justify-center items-center h-[50px]">
-                    Find
+            <!-- 5. Search Button Group -->
+            <div class="w-full md:w-3/12 pt-6 md:pt-5 flex gap-2">
+                <button type="submit" id="searchBtn"
+                    class="flex-grow bg-yellow-500 text-slate-900 font-bold py-3 rounded-xl hover:bg-yellow-400 transition shadow-lg shadow-yellow-500/30 flex justify-center items-center h-[50px] group">
+                    <i data-lucide="search" class="w-4 h-4 mr-2 group-hover:scale-110 transition"></i>
+                    <span>Find</span>
+                </button>
+                <button type="button" id="resetBtn"
+                    class="w-14 bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600 rounded-xl transition flex justify-center items-center h-[50px]"
+                    title="Clear Filters">
+                    <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
                 </button>
             </div>
         </form>
@@ -575,11 +581,12 @@ $resultCount = count($results);
         const initialState = document.getElementById('initialState');
         const emptyState = document.getElementById('emptyState');
 
-        async function performSearch() {
+        async function performSearch(isManual = false) {
             const district = document.getElementById('districtInput').value;
             const upozilla = document.getElementById('upozillaInput').value;
             const school = document.getElementById('schoolInput').value;
             const name = document.getElementById('nameInput').value;
+            const searchBtn = document.getElementById('searchBtn');
 
             if (!district && !upozilla && !school && !name) {
                 friendsGrid.classList.add('hidden');
@@ -589,8 +596,12 @@ $resultCount = count($results);
                 return;
             }
 
-            // Visual feedback
+            // Visual feedback on badge and button
             countBadge.innerHTML = '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i>';
+            if (isManual) {
+                searchBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin mr-2"></i> Searching...';
+                searchBtn.disabled = true;
+            }
             lucide.createIcons();
 
             try {
@@ -599,17 +610,23 @@ $resultCount = count($results);
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 });
                 const data = await response.json();
-                
+
                 renderResults(data.results);
                 countBadge.textContent = data.count;
             } catch (error) {
                 console.error("Search error:", error);
+            } finally {
+                if (isManual) {
+                    searchBtn.innerHTML = '<i data-lucide="search" class="w-4 h-4 mr-2"></i> Find';
+                    searchBtn.disabled = false;
+                    lucide.createIcons();
+                }
             }
         }
 
         function renderResults(results) {
             initialState.classList.add('hidden');
-            
+
             if (results.length === 0) {
                 friendsGrid.classList.add('hidden');
                 emptyState.classList.remove('hidden');
@@ -618,7 +635,7 @@ $resultCount = count($results);
 
             emptyState.classList.add('hidden');
             friendsGrid.classList.remove('hidden');
-            
+
             friendsGrid.innerHTML = results.map(friend => {
                 let photo = friend.profile_photo || '';
                 if (photo === '') {
@@ -657,7 +674,7 @@ $resultCount = count($results);
                     </div>
                 `;
             }).join('');
-            
+
             lucide.createIcons();
         }
 
@@ -677,11 +694,11 @@ $resultCount = count($results);
                 // Distribute to lists (simplified: put all in both or filter if possible)
                 const upozillaList = document.getElementById('upozillaList');
                 const zillaList = document.getElementById('zillaList');
-                
+
                 const html = locations.map(loc => `<option value="${loc}">`).join('');
                 upozillaList.innerHTML = html;
                 zillaList.innerHTML = html;
-            } catch (e) {}
+            } catch (e) { }
         }
 
         // Mobile Menu Toggle Logic
@@ -708,11 +725,18 @@ $resultCount = count($results);
         document.addEventListener('DOMContentLoaded', () => {
             loadSession();
             loadSuggestions();
-            
-            // Prevent form submit reload
+
+            // Prevent form submit reload and force immediate search
             document.querySelector('form').addEventListener('submit', (e) => {
                 e.preventDefault();
-                performSearch();
+                clearTimeout(searchTimeout); // Cancel pending debounce
+                performSearch(true); // Force search with button feedback
+            });
+
+            // Reset functionality
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                document.querySelectorAll('.search-input').forEach(input => input.value = '');
+                performSearch(); // Clear results and show initial state
             });
         });
     </script>
