@@ -12,6 +12,9 @@
     <!-- Icons (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Shared Utilities -->
+    <script src="../../assets/js/main.js"></script>
+
     <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@1,300&display=swap"
@@ -503,7 +506,8 @@
                 </div>
             </div>
 
-            <button onclick="alert('Thank you for your generosity! This is a demo.')"
+            <button
+                onclick="showToast('Thank you for your generosity! This donation system is currently in demo mode.', 'notice')"
                 class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-slate-800 shadow-xl hover:shadow-2xl transition transform hover:-translate-y-1">
                 Confirm Donation
             </button>

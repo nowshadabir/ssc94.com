@@ -48,6 +48,9 @@ if (file_exists($configPath)) {
     <!-- Icons (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Shared Utilities -->
+    <script src="../../assets/js/main.js"></script>
+
     <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700&family=Handlee&display=swap"
@@ -142,8 +145,7 @@ if (file_exists($configPath)) {
     </style>
     <script>
         function safeNavigate(url) {
-            try { window.location.href = url; }
-            catch (e) { alert("Navigating to " + url); }
+            window.location.href = url;
         }
     </script>
 </head>

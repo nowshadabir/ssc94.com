@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Registration | SSC Batch '94</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../../assets/js/main.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -156,13 +157,15 @@
                 });
                 const result = await response.json();
                 if (result.success) {
-                    alert(result.message);
-                    window.location.href = 'admin_login.html';
+                    showToast(result.message);
+                    setTimeout(() => {
+                        window.location.href = 'admin_login.html';
+                    }, 2000);
                 } else {
-                    alert(result.message || 'Error occurred');
+                    showToast(result.message || 'Error occurred', 'error');
                 }
             } catch (error) {
-                alert('Network error. Please try again.');
+                showToast('Network error. Please try again.', 'error');
                 console.error(error);
             } finally {
                 submitBtn.disabled = false;

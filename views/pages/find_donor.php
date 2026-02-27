@@ -25,6 +25,9 @@
     <!-- Icons (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Shared Utilities -->
+    <script src="../../assets/js/main.js"></script>
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
@@ -465,7 +468,7 @@
                     </div>
 
                     <div class="flex gap-2 mt-auto">
-                        <button onclick="alert('Calling ${donor.phone}')" class="flex-1 ${status.isEligible ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/30' : 'bg-slate-200 text-slate-500 cursor-not-allowed'} py-2.5 rounded-lg font-bold transition flex items-center justify-center">
+                        <button onclick="showToast('Initiating call to ${donor.phone}...')" class="flex-1 ${status.isEligible ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/30' : 'bg-slate-200 text-slate-500 cursor-not-allowed'} py-2.5 rounded-lg font-bold transition flex items-center justify-center">
                             <i data-lucide="phone" class="w-4 h-4 mr-2"></i> Call
                         </button>
                     </div>
