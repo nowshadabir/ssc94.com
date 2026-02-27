@@ -101,6 +101,8 @@ function redirect($url)
  */
 function jsonResponse($success, $message, $data = null)
 {
+    if (ob_get_length())
+        ob_clean();
     header('Content-Type: application/json');
     echo json_encode([
         'success' => $success,
