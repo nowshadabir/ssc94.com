@@ -615,6 +615,9 @@
             }
         });
 
+        let _isLoggedIn = false;
+        let _userData = null;
+
         // Auth UI Logic
         function setAuthUi(isLoggedIn, user) {
             const loginLink = document.getElementById('login-link');
@@ -624,6 +627,8 @@
             const profileMobile = document.getElementById('profile-link-mobile');
 
             if (isLoggedIn) {
+                _isLoggedIn = true;
+                _userData = user;
                 if (loginLink) loginLink.classList.add('hidden');
                 if (profileDropdown) profileDropdown.classList.remove('hidden');
                 if (logoutBtn) logoutBtn.classList.remove('hidden');
@@ -644,12 +649,37 @@
                 if (user?.name && profileName) {
                     profileName.textContent = user.name.split(' ')[0];
                 }
+                
+                // Update Reunion button only if not already registered
+                const regAction = document.getElementById('registration-action');
+                if (regAction && !regAction.innerText.includes('Registration Confirmed')) {
+                    const regBtn = regAction.querySelector('button');
+                    if (regBtn) {
+                        regBtn.innerHTML = 'Register Now';
+                        regBtn.classList.remove('bg-slate-700');
+                        regBtn.classList.add('bg-slate-900');
+                    }
+                }
             } else {
+                _isLoggedIn = false;
+                _userData = null;
                 if (loginLink) loginLink.classList.remove('hidden');
                 if (profileDropdown) profileDropdown.classList.add('hidden');
                 if (logoutBtn) logoutBtn.classList.add('hidden');
                 if (loginMobile) loginMobile.classList.remove('hidden');
                 if (profileMobile) profileMobile.classList.add('hidden');
+
+                // Update Reunion button for public
+                const regAction = document.getElementById('registration-action');
+                if (regAction && !regAction.innerText.includes('Registration Confirmed')) {
+                    const regBtn = regAction.querySelector('button');
+                    if (regBtn) {
+                        regBtn.innerHTML = '<i data-lucide="lock" class="w-4 h-4 inline mr-2 opacity-50"></i> Login to Register';
+                        regBtn.classList.remove('bg-slate-900');
+                        regBtn.classList.add('bg-slate-700');
+                        lucide.createIcons();
+                    }
+                }
             }
         }
 
@@ -775,20 +805,36 @@
         const SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
 
         function openRegistration() {
+            if (!_isLoggedIn) {
+                // If not logged in, show a message or redirect
+                const confirmLogin = confirm("You must be logged in as a member to register for the Grand Reunion. Would you like to log in now?");
+                if (confirmLogin) {
+                    window.location.href = '../auth/login.html?redirect=pages/reunion.php';
+                }
+                return;
+            }
+
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
             // Pre-fill member info from session
-            fetch('../../api/auth/session.php', { credentials: 'same-origin' })
-                .then(r => r.json())
-                .then(payload => {
-                    const d = payload?.data;
-                    if (d) {
-                        const n = document.getElementById('memberName');
-                        const m = document.getElementById('memberMobile');
-                        if (n) n.value = d.name || '';
-                        if (m) m.value = d.mobile || '';
-                    }
-                }).catch(() => { });
+            if (_userData) {
+                const n = document.getElementById('memberName');
+                const m = document.getElementById('memberMobile');
+                if (n) n.value = _userData.name || '';
+                if (m) m.value = _userData.mobile || '';
+            } else {
+                fetch('../../api/auth/session.php', { credentials: 'same-origin' })
+                    .then(r => r.json())
+                    .then(payload => {
+                        const d = payload?.data;
+                        if (d) {
+                            const n = document.getElementById('memberName');
+                            const m = document.getElementById('memberMobile');
+                            if (n) n.value = d.name || '';
+                            if (m) m.value = d.mobile || '';
+                        }
+                    }).catch(() => { });
+            }
             calculateTotal();
         }
 
