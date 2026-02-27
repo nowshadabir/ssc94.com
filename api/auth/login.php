@@ -15,35 +15,43 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Get POST data
-$mobile = sanitize($_POST['mobile'] ?? '');
+$identifier = sanitize($_POST['identifier'] ?? '');
 $password = $_POST['password'] ?? '';
 $remember = isset($_POST['remember']) && $_POST['remember'] === 'on';
 
 // Validate inputs
-if (empty($mobile) || empty($password)) {
-    jsonResponse(false, 'Mobile and password are required');
+if (empty($identifier) || empty($password)) {
+    jsonResponse(false, 'Identifier and password are required');
 }
-
-// Remove any spaces or dashes from mobile number
-$mobile = preg_replace('/[\s\-]/', '', $mobile);
-
 
 try {
     $db = new Database();
     $conn = $db->getConnection();
 
-    // Get user by mobile
-    $stmt = $conn->prepare("
-        SELECT user_id, full_name, email, password_hash, status 
-        FROM users 
-        WHERE mobile = ?
-    ");
-    $stmt->execute([$mobile]);
+    // Check if identifier is email or mobile
+    // If it contains @, treat as email, otherwise treat as mobile (and clean it)
+    if (filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
+        $stmt = $conn->prepare("
+            SELECT user_id, full_name, email, password_hash, status 
+            FROM users 
+            WHERE email = ?
+        ");
+        $stmt->execute([$identifier]);
+    } else {
+        // Remove any spaces or dashes from mobile number
+        $cleanMobile = preg_replace('/[\s\-]/', '', $identifier);
+        $stmt = $conn->prepare("
+            SELECT user_id, full_name, email, password_hash, status 
+            FROM users 
+            WHERE mobile = ?
+        ");
+        $stmt->execute([$cleanMobile]);
+    }
+
     $user = $stmt->fetch();
 
-
     if (!$user) {
-        jsonResponse(false, 'Invalid mobile or password');
+        jsonResponse(false, 'Invalid identifier or password');
     }
 
     // Check if account is pending payment
@@ -72,7 +80,7 @@ try {
             $_SERVER['HTTP_USER_AGENT'] ?? null
         ]);
 
-        jsonResponse(false, 'Invalid mobile or password');
+        jsonResponse(false, 'Invalid identifier or password');
     }
 
     // Login successful
