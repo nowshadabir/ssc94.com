@@ -29,12 +29,11 @@ class EmailService
         // Below is a simplified SMTP over SSL (port 465)
 
         try {
-            $timeout = 15;
-            $prefix = ($port == 465) ? 'ssl://' : '';
-            $socket = @fsockopen($prefix . $host, $port, $errno, $errstr, $timeout);
+            $timeout = 30;
+            $socket = @fsockopen(($port == 465 ? 'ssl://' : '') . $host, $port, $errno, $errstr, $timeout);
 
             if (!$socket) {
-                logError("SMTP Connection Failed to $host:$port - Error: $errstr ($errno)");
+                logError("SMTP Connection Error: $errstr ($errno)");
                 return false;
             }
 

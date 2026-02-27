@@ -190,15 +190,10 @@ function uploadFile($file, $destination)
  */
 function logError($message)
 {
-    $logDir = BASE_PATH . '/logs';
-    if (!is_dir($logDir)) {
-        @mkdir($logDir, 0755, true);
-    }
-
-    $logFile = $logDir . '/error.log';
+    $logFile = BASE_PATH . '/logs/error.log';
     $timestamp = date('Y-m-d H:i:s');
     $logMessage = "[{$timestamp}] {$message}" . PHP_EOL;
-    @error_log($logMessage, 3, $logFile);
+    error_log($logMessage, 3, $logFile);
 }
 /**
  * Process referral reward for a completed payment

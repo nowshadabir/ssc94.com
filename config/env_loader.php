@@ -27,12 +27,13 @@ function loadEnv($path)
             // Remove quotes if present
             $value = trim($value, '"\'');
 
-            // Overwrite existing values to ensure .env takes priority
-            if (function_exists('putenv')) {
-                @putenv(sprintf('%s=%s', $name, $value));
+            if (!array_key_exists($name, $_SERVER) && !array_key_exists($name, $_ENV)) {
+                if (function_exists('putenv')) {
+                    @putenv(sprintf('%s=%s', $name, $value));
+                }
+                $_ENV[$name] = $value;
+                $_SERVER[$name] = $value;
             }
-            $_ENV[$name] = $value;
-            $_SERVER[$name] = $value;
         }
     }
     return true;
