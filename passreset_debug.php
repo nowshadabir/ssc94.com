@@ -9,7 +9,7 @@ require_once 'includes/EmailService.php';
 echo "<h2>Password Reset Debugger</h2>";
 echo "<p>This script will test if a specific email exists in the database and attempt to send a test code.</p>";
 
-$testEmail = $_GET['email'] ?? 'knabirofficial@gmail.com';
+$testEmail = $_GET['email'] ?? 'info.nowshad@proton.me';
 $testType = $_GET['type'] ?? 'admin';
 
 echo "<div style='background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;'>";
