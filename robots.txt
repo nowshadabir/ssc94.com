@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /config/
+Disallow: /views/admin/
+Disallow: /views/auth/
+Disallow: /logs/
+
+Sitemap: https://ssc94.com/sitemap.xml

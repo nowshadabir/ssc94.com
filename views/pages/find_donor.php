@@ -4,7 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Blood Donor - Red Rescue | SSC Batch '94</title>
+    <title>Find Blood Donor - Red Rescue | SSC Batch '94 Alumni</title>
+    <meta name="description"
+        content="Search for blood donors within the SSC Batch 1994 alumni network. Red Rescue is a dedicated wing for emergency blood support.">
+    <meta name="keywords"
+        content="SSC 94 Blood Donor, Red Rescue 94, Alumni Blood Bank, Emergency Blood Bangladesh, Batch 94 Social Welfare">
+    <link rel="canonical" href="https://ssc94.com/views/pages/find_donor.php">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ssc94.com/views/pages/find_donor.php">
+    <meta property="og:title" content="Find Blood Donor - Red Rescue | SSC Batch '94 Alumni">
+    <meta property="og:description"
+        content="Need blood? Search our verified donor database of 1994 batchmates. Every drop counts.">
+    <meta property="og:image" content="https://ssc94.com/assets/images/og-rescue.jpg">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>

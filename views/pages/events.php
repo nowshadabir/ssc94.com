@@ -23,7 +23,20 @@ if (file_exists($configPath)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events & Adda - SSC Batch '94</title>
+    <title>Events & Adda - SSC Batch '94 Alumni</title>
+    <meta name="description"
+        content="Discover upcoming reunions, local meetups, and social gatherings (Adda) organized by the SSC Batch 1994 alumni community.">
+    <meta name="keywords"
+        content="SSC 94 Events, Alumni Meetup Bangladesh, SSC 94 Reunion, Batch 94 Adda, Alumni Gatherings Dhaka">
+    <link rel="canonical" href="https://ssc94.com/views/pages/events.php">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ssc94.com/views/pages/events.php">
+    <meta property="og:title" content="Events & Adda - SSC Batch '94 Alumni">
+    <meta property="og:description"
+        content="Join our upcoming alumni gatherings and stay connected with your batchmates.">
+    <meta property="og:image" content="https://ssc94.com/assets/images/og-events.jpg">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>

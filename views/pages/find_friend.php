@@ -83,7 +83,20 @@ $resultCount = count($results);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find a Friend - SSC Batch '94</title>
+    <title>Find Your School Friends - SSC Batch '94 Member Directory</title>
+    <meta name="description"
+        content="Search the SSC Batch 1994 alumni directory. Find your old school friends by district, school name, or name and reconnect with your batchmates.">
+    <meta name="keywords"
+        content="Find SSC 94 Friends, Batch 94 Directory, SSC 94 School Search, Alumni Registry Bangladesh">
+    <link rel="canonical" href="https://ssc94.com/views/pages/find_friend.php">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ssc94.com/views/pages/find_friend.php">
+    <meta property="og:title" content="Find Your School Friends - SSC Batch '94 Member Directory">
+    <meta property="og:description"
+        content="Reconnect with your 1994 batchmates. Search our comprehensive directory of alumni.">
+    <meta property="og:image" content="https://ssc94.com/assets/images/og-find.jpg">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>

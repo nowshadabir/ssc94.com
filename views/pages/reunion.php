@@ -4,7 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Reunion 2024 - SSC Batch '94</title>
+    <title>Grand Reunion 2024 - SSC Batch '94 Alumni</title>
+    <meta name="description"
+        content="Register for the SSC Batch 1994 Grand Reunion. Join us for a day of nostalgia, cultural programs, and connecting with lifelong friends.">
+    <meta name="keywords"
+        content="SSC 94 Grand Reunion, Batch 94 30 Years, Alumni Celebration Dhaka, SSC 94 Registration">
+    <link rel="canonical" href="https://ssc94.com/views/pages/reunion.php">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ssc94.com/views/pages/reunion.php">
+    <meta property="og:title" content="Grand Reunion 2024 - SSC Batch '94 Alumni">
+    <meta property="og:description"
+        content="30 Years of Brotherhood. Secure your spot for the biggest alumni gathering of the year.">
+    <meta property="og:image" content="https://ssc94.com/assets/images/og-reunion.jpg">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
