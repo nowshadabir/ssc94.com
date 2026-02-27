@@ -12,6 +12,9 @@
     <!-- Icons (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Shared Utilities -->
+    <script src="../../assets/js/main.js"></script>
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
@@ -590,7 +593,7 @@
             const amount = document.querySelector('input[type="number"]').value;
 
             if (!phone || !amount) {
-                alert("Please fill in phone and amount");
+                showToast("Please fill in phone and amount", "error");
                 return;
             }
 
@@ -636,7 +639,7 @@
         function verifyOTP() {
             const otp = document.getElementById('otpInput').value;
             if (otp.length < 4) { // Lenient check
-                alert("Please enter a valid OTP");
+                showToast("Please enter a valid OTP", "error");
                 return;
             }
 
@@ -655,7 +658,7 @@
         function verifyPIN() {
             const pin = document.getElementById('pinInput').value;
             if (pin.length < 4) {
-                alert("Please enter your PIN");
+                showToast("Please enter your PIN", "error");
                 return;
             }
 

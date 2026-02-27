@@ -12,6 +12,9 @@
     <!-- Icons (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Shared Utilities -->
+    <script src="../../assets/js/main.js"></script>
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
@@ -110,12 +113,7 @@
     <script>
         // Helper to handle navigation errors in restricted preview environments
         function safeNavigate(url) {
-            try {
-                window.location.href = url;
-            } catch (e) {
-                console.log("Navigation simulated: " + url);
-                alert("Navigation to " + url + " simulated (Environment restriction).");
-            }
+            window.location.href = url;
         }
     </script>
 </head>
@@ -692,25 +690,27 @@
 
                     if (paymentResult.success && paymentResult.paymentURL) {
                         // Show success message
-                        alert('Registration successful! Redirecting to payment...');
+                        showToast('Registration successful! Redirecting to payment...');
 
                         // Redirect to payment gateway
-                        window.location.href = paymentResult.paymentURL;
+                        setTimeout(() => {
+                            window.location.href = paymentResult.paymentURL;
+                        }, 1000);
                     } else {
-                        alert(paymentResult.message || 'Failed to initiate payment. Please try again.');
+                        showToast(paymentResult.message || 'Failed to initiate payment. Please try again.', 'error');
                         submitBtn.innerHTML = originalText;
                         submitBtn.disabled = false;
                         lucide.createIcons();
                     }
                 } else {
-                    alert(result.message || 'Registration failed. Please try again.');
+                    showToast(result.message || 'Registration failed. Please try again.', 'error');
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                     lucide.createIcons();
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                showToast('An error occurred. Please try again.', 'error');
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
                 lucide.createIcons();
@@ -750,7 +750,7 @@
 
         function verifyOTP() {
             const otp = document.getElementById('otpInput').value;
-            if (otp.length < 4) return alert("Enter valid OTP");
+            if (otp.length < 4) return showToast("Enter valid OTP", "error");
 
             showLoader(() => {
                 document.getElementById('view-otp').classList.add('hidden');
@@ -760,7 +760,7 @@
 
         function verifyPIN() {
             const pin = document.getElementById('pinInput').value;
-            if (pin.length < 4) return alert("Enter PIN");
+            if (pin.length < 4) return showToast("Enter PIN", "error");
 
             showLoader(() => {
                 document.getElementById('view-pin').classList.add('hidden');

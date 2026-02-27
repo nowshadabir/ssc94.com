@@ -25,6 +25,9 @@
     <!-- Icons (Lucide) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Shared Utilities -->
+    <script src="../../assets/js/main.js"></script>
+
     <!-- Ticket Generation (QRCode) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
@@ -649,7 +652,7 @@
                 if (user?.name && profileName) {
                     profileName.textContent = user.name.split(' ')[0];
                 }
-                
+
                 // Update Reunion button only if not already registered
                 const regAction = document.getElementById('registration-action');
                 if (regAction && !regAction.innerText.includes('Registration Confirmed')) {
@@ -958,7 +961,7 @@
                 const payResult = await payResponse.json();
 
                 if (!payResult.success) {
-                    alert(payResult.message || 'Failed to initiate payment. Please try again.');
+                    showToast(payResult.message || 'Failed to initiate payment. Please try again.', 'error');
                     btn.disabled = false;
                     btn.innerHTML = 'Proceed to Payment';
                     return;
@@ -970,7 +973,7 @@
 
             } catch (error) {
                 console.error('Payment initiation error:', error);
-                alert('Connection error. Please try again.');
+                showToast('Connection error. Please try again.', 'error');
                 btn.disabled = false;
                 btn.innerHTML = 'Proceed to Payment';
             }

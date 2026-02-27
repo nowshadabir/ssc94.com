@@ -7,6 +7,7 @@
     <title>Processing Payment - SSC Batch '94</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="assets/js/main.js"></script>
 </head>
 
 <body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen flex items-center justify-center">
@@ -48,13 +49,17 @@
                     }, 1500);
                 } else {
                     // Show error and redirect to failed page
-                    alert(result.message || 'Failed to initiate payment');
-                    window.location.href = 'payment_failed.php';
+                    showToast(result.message || 'Failed to initiate payment', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'payment_failed.php';
+                    }, 2000);
                 }
             } catch (error) {
                 console.error('Payment initiation error:', error);
-                alert('An error occurred. Please try again.');
-                window.location.href = 'payment_failed.php';
+                showToast('An error occurred. Please try again.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'payment_failed.php';
+                }, 2000);
             }
         });
     </script>

@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | SSC Batch '94</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../../assets/js/main.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -116,18 +117,20 @@
                 try {
                     const result = JSON.parse(text);
                     if (result.success) {
-                        alert('Login successful! Redirecting to dashboard...');
-                        window.location.href = '../admin/dashboard.php';
+                        showToast('Login successful! Redirecting to dashboard...');
+                        setTimeout(() => {
+                            window.location.href = '../admin/dashboard.php';
+                        }, 1000);
                     } else {
-                        alert(result.message || 'Invalid credentials');
+                        showToast(result.message || 'Invalid credentials', 'error');
                     }
                 } catch (jsonErr) {
                     console.error('Server response was not JSON:', text);
-                    alert('Server error: The response from the server was invalid.');
+                    showToast('Server error: Invalid response from server.', 'error');
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
-                alert('Connection error. Please check your internet or try again.');
+                showToast('Connection error. Please try again.', 'error');
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;

@@ -227,8 +227,8 @@ $pageSubtitle = "Monitor new member signups and referrals";
                 const fd = new FormData(); fd.append('action', 'mark_paid'); fd.append('user_id', userId);
                 const res = await fetch('../../api/admin/mark_payment.php', { method: 'POST', body: fd });
                 const result = await res.json();
-                if (result.success) loadUsers(); else alert('Error: ' + (result.message || 'Failed to mark payment'));
-            } catch (error) { console.error('Error marking payment:', error); alert('An error occurred.'); }
+                if (result.success) loadUsers(); else showToast('Error: ' + (result.message || 'Failed to mark payment'), 'error');
+            } catch (error) { console.error('Error marking payment:', error); showToast('An error occurred.', 'error'); }
         }
         function viewUser(userId) { window.location.href = `../profile.php?id=${userId}`; }
         function formatDate(dateString) { const date = new Date(dateString); const now = new Date(); const diffTime = Math.abs(now - date); const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); if (diffDays === 0) return 'Today'; else if (diffDays === 1) return 'Yesterday'; else if (diffDays < 7) return diffDays + ' days ago'; else return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }

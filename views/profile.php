@@ -49,6 +49,7 @@ try {
     <link rel="canonical" href="https://ssc94.com/views/profile.php">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         *,
@@ -1028,7 +1029,7 @@ try {
     </style>
     <script>
         function safeNavigate(url) {
-            try { window.location.href = url; } catch (e) { alert('Navigating to ' + url); }
+            window.location.href = url;
         }
     </script>
 </head>
@@ -1596,10 +1597,11 @@ try {
             const permanentAddress = document.getElementById('inputPermanentAddress').value.trim();
 
             if (!name || !email || !mobile) {
-                alert('Please provide Name, Email and Mobile.'); return;
+                showToast('Please provide Name, Email and Mobile.', 'error'); return;
             }
-            if (!/^[0-9]{11}$/.test(mobile)) {
-                alert('Mobile number must be exactly 11 digits'); return;
+            if (mobile.length !== 11 || !mobile.startsWith('01')) {
+                showToast('Please enter a valid 11-digit mobile number starting with 01', 'error');
+                return;
             }
 
             saveBtn.disabled = true;
@@ -1624,12 +1626,12 @@ try {
             try {
                 const response = await fetch('../api/profile/update.php', { method: 'POST', body: formData, credentials: 'same-origin' });
                 const payload = await response.json();
-                if (!response.ok || !payload.success) { alert(payload.message || 'Failed to update profile'); return; }
+                if (!response.ok || !payload.success) { showToast(payload.message || 'Failed to update profile', 'error'); return; }
                 userData = payload.data;
                 loadUserData();
                 closeEditModal();
-                alert('Profile updated successfully!');
-            } catch (e) { alert('Failed to update profile.'); }
+                showToast('Profile updated successfully!');
+            } catch (e) { showToast('Failed to update profile.', 'error'); }
             finally {
                 saveBtn.disabled = false;
                 saveBtn.innerHTML = originalHtml;
