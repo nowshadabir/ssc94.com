@@ -62,7 +62,7 @@ class EmailService
             $loginRes = $getResponse($socket);
 
             if (strpos($loginRes, '235') === false) {
-                logError("SMTP Login Failed for $user");
+                logError("SMTP Login Failed for $user. Response: $loginRes");
                 return false;
             }
 
