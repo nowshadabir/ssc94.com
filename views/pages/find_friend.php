@@ -467,7 +467,8 @@ $resultCount = count($results);
                     <div class="relative mb-4">
                         <img src="<?php echo htmlspecialchars($photo); ?>"
                             alt="<?php echo htmlspecialchars($friend['full_name']); ?>"
-                            class="w-24 h-24 rounded-full object-cover border-4 border-slate-50 group-hover:border-yellow-100 transition-colors">
+                            class="w-24 h-24 rounded-full object-cover border-4 border-slate-50 group-hover:border-yellow-100 transition-colors"
+                            onerror="this.onerror=null;this.src='../../assets/images/default-avatar.svg';">
                     </div>
 
                     <h3 class="font-bold text-lg text-slate-800 leading-tight mb-1">
@@ -653,7 +654,8 @@ $resultCount = count($results);
                     <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 friend-card flex flex-col items-center text-center group">
                         <div class="relative mb-4">
                             <img src="${photo}" alt="${friend.full_name}"
-                                class="w-24 h-24 rounded-full object-cover border-4 border-slate-50 group-hover:border-yellow-100 transition-colors">
+                                class="w-24 h-24 rounded-full object-cover border-4 border-slate-50 group-hover:border-yellow-100 transition-colors"
+                                onerror="this.onerror=null;this.src='../../assets/images/default-avatar.svg';">
                         </div>
                         <h3 class="font-bold text-lg text-slate-800 leading-tight mb-1">${friend.full_name}</h3>
                         <p class="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded-full mb-4">${role}</p>

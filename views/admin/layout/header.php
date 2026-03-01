@@ -35,7 +35,8 @@
                 </p>
             </div>
             <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($adminName); ?>&background=0f172a&color=fff&size=80"
-                class="w-9 h-9 rounded-full border-2 border-slate-200" alt="Admin">
+                class="w-9 h-9 rounded-full border-2 border-slate-200" alt="Admin"
+                onerror="this.onerror=null;this.src='../../assets/images/default-avatar.svg';">
             <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400"></i>
         </button>
 

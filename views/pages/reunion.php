@@ -157,7 +157,8 @@
                             class="hidden flex items-center gap-2 bg-white/5 pl-1 pr-4 py-1 rounded-full border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
                             onclick="window.location.href='../profile.php'">
                             <img id="profile-photo" src="https://i.pravatar.cc/300?u=guest"
-                                class="w-8 h-8 rounded-full border-2 border-yellow-400/50">
+                                class="w-8 h-8 rounded-full border-2 border-yellow-400/50"
+                                onerror="this.onerror=null;this.src='../../assets/images/default-avatar.svg';">
                             <span id="profile-name" class="text-xs font-bold text-white tracking-wide">Member</span>
                         </div>
                     </div>
@@ -648,6 +649,7 @@
                         photoPath = '../../' + photoPath;
                     }
                     profilePhoto.src = photoPath;
+                    profilePhoto.onerror = () => { profilePhoto.src = '../../assets/images/default-avatar.svg'; };
                 }
                 if (user?.name && profileName) {
                     profileName.textContent = user.name.split(' ')[0];

@@ -1051,7 +1051,8 @@ try {
             </div>
             <div class="nav-right">
                 <div class="nav-user" onclick="safeNavigate('profile.php')">
-                    <img id="navProfileImage" src="https://i.pravatar.cc/100" alt="Profile">
+                    <img id="navProfileImage" src="https://i.pravatar.cc/100" alt="Profile"
+                        onerror="this.onerror=null;this.src='../assets/images/default-avatar.svg';">
                     <span id="navProfileName">Member</span>
                 </div>
                 <a href="../api/auth/logout.php" class="nav-logout" title="Logout">
@@ -1085,7 +1086,7 @@ try {
         <div class="hero-content">
             <div class="hero-avatar-wrap">
                 <img src="https://i.pravatar.cc/300?u=<?php echo $userId; ?>" alt="Profile" id="profileImage"
-                    class="hero-avatar">
+                    class="hero-avatar" onerror="this.onerror=null;this.src='../assets/images/default-avatar.svg';">
                 <label for="profileImageInput" class="hero-avatar-edit" title="Change Photo">
                     <i data-lucide="camera" style="width:20px;height:20px;"></i>
                 </label>
@@ -1451,9 +1452,15 @@ try {
             setElText('displayMobile', userData.mobile);
 
             const img = document.getElementById('profileImage');
-            if (img) img.src = userData.profileImage;
+            if (img) {
+                img.src = userData.profileImage || '../assets/images/default-avatar.svg';
+                img.onerror = () => { img.src = '../assets/images/default-avatar.svg'; };
+            }
             const navImg = document.getElementById('navProfileImage');
-            if (navImg) navImg.src = userData.profileImage;
+            if (navImg) {
+                navImg.src = userData.profileImage || '../assets/images/default-avatar.svg';
+                navImg.onerror = () => { navImg.src = '../assets/images/default-avatar.svg'; };
+            }
 
             const d = new Date(userData.lastDonation);
             setElText('displayLastDonation', d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }));

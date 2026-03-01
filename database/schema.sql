@@ -388,10 +388,10 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- ============================================================================
 INSERT INTO payment_gateway_settings (gateway_name, is_active, api_key, success_url, cancel_url, webhook_url)
 VALUES
-    ('rupantorpay', TRUE,  'g8wxKwv4ts2ToZO7siWuQsAAHcfafRnRRPAjMeOrcpbTuX8vys',
-     'http://localhost/SSC-94/ssc94.com/api/payment/success.php',
-     'http://localhost/SSC-94/ssc94.com/api/payment/cancel.php',
-     'http://localhost/SSC-94/ssc94.com/api/payment/webhook.php'),
+    ('rupantorpay', TRUE,  'YOUR_RUPANTORPAY_API_KEY_HERE',
+     'https://yourdomain.com/api/payment/success.php',
+     'https://yourdomain.com/api/payment/cancel.php',
+     'https://yourdomain.com/api/payment/webhook.php'),
     ('bkash', FALSE, '', '', '', '')
 ON DUPLICATE KEY UPDATE
     api_key     = VALUES(api_key),

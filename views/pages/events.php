@@ -195,7 +195,8 @@ if (file_exists($configPath)) {
                             class="hidden flex items-center gap-2 bg-white/5 pl-1 pr-4 py-1 rounded-full border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
                             onclick="safeNavigate('../profile.php')">
                             <img id="profile-photo" src="https://i.pravatar.cc/300?u=guest"
-                                class="w-8 h-8 rounded-full border-2 border-yellow-400/50">
+                                class="w-8 h-8 rounded-full border-2 border-yellow-400/50"
+                                onerror="this.onerror=null;this.src='../../assets/images/default-avatar.svg';">
                             <span id="profile-name" class="text-xs font-bold text-white tracking-wide">Member</span>
                         </div>
                     </div>
@@ -437,7 +438,7 @@ if (file_exists($configPath)) {
                 let avatarImgs = '';
                 event.attendees.slice(0, 4).forEach(att => {
                     avatarImgs += `
-                        <img class="w-8 h-8 rounded-full border-2 border-white avatar relative z-0 hover:z-10 bg-slate-200 object-cover" src="${att.img}" alt="${att.name}">
+                        <img class="w-8 h-8 rounded-full border-2 border-white avatar relative z-0 hover:z-10 bg-slate-200 object-cover" src="${att.img}" alt="${att.name}" onerror="this.onerror=null;this.src='../../assets/images/default-avatar.svg';">
                     `;
                 });
                 if (event.totalGoing > 4) {
@@ -462,7 +463,7 @@ if (file_exists($configPath)) {
                     <div class="flex justify-between items-start mb-6">
                         <div class="flex items-center">
                             <div class="relative">
-                                <img src="${event.hostImg}" class="w-14 h-14 rounded-2xl border-2 border-white shadow-md bg-slate-200 object-cover transform rotate-3">
+                                <img src="${event.hostImg}" class="w-14 h-14 rounded-2xl border-2 border-white shadow-md bg-slate-200 object-cover transform rotate-3" onerror="this.onerror=null;this.src='../../assets/images/default-avatar.svg';">
                                 <div class="absolute -bottom-1 -right-1 bg-yellow-400 w-4 h-4 rounded-full border-2 border-white"></div>
                             </div>
                             <div class="ml-4">
@@ -883,6 +884,7 @@ if (file_exists($configPath)) {
                         photoPath = '../../' + photoPath;
                     }
                     profilePhoto.src = photoPath;
+                    profilePhoto.onerror = () => { profilePhoto.src = '../../assets/images/default-avatar.svg'; };
                 }
                 if (user?.name && profileName) {
                     profileName.textContent = user.name.split(' ')[0];
