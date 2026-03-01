@@ -18,20 +18,6 @@ try {
     $db = new Database();
     $conn = $db->getConnection();
 
-    $personalInfoColsStmt = $conn->prepare("
-        SELECT COLUMN_NAME
-        FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_SCHEMA = DATABASE()
-          AND TABLE_NAME = 'user_personal_info'
-          AND COLUMN_NAME IN ('last_donation_date', 'willing_to_donate')
-    ");
-    $personalInfoColsStmt->execute();
-    $personalInfoCols = $personalInfoColsStmt->fetchAll(PDO::FETCH_COLUMN);
-    $hasLastDonation = in_array('last_donation_date', $personalInfoCols, true);
-    $hasWillingToDonate = in_array('willing_to_donate', $personalInfoCols, true);
-    $lastDonationSelect = $hasLastDonation ? 'pi.last_donation_date' : 'NULL AS last_donation_date';
-    $willingSelect = $hasWillingToDonate ? 'pi.willing_to_donate' : 'NULL AS willing_to_donate';
-
     $stmt = $conn->prepare("
         SELECT 
             u.user_id,
@@ -45,11 +31,15 @@ try {
             pi.father_name,
             pi.mother_name,
             pi.permanent_address,
-            {$lastDonationSelect},
-            {$willingSelect},
+            pi.date_of_birth,
+            pi.gender,
+            pi.last_donation,
+            pi.willing_to_donate,
             pr.job_business,
             pr.institute_working_station,
             pr.current_location,
+            pr.linkedin_profile,
+            pr.facebook_profile,
             si.school_name,
             si.zilla,
             si.union_upozilla
@@ -89,6 +79,8 @@ try {
         'job' => $user['job_business'] ?? 'Not specified',
         'institute' => $user['institute_working_station'] ?? 'Not specified',
         'currentLocation' => $user['current_location'] ?? 'Bangladesh',
+        'linkedin' => $user['linkedin_profile'] ?? '',
+        'facebook' => $user['facebook_profile'] ?? '',
         'bloodGroup' => $user['blood_group'] ?? 'Not specified',
         'schoolName' => $user['school_name'] ?? 'Not specified',
         'zilla' => $user['zilla'] ?? 'Not specified',
@@ -96,7 +88,9 @@ try {
         'fatherName' => $user['father_name'] ?? '',
         'motherName' => $user['mother_name'] ?? '',
         'permanentAddress' => $user['permanent_address'] ?? '',
-        'lastDonation' => $user['last_donation_date'] ?? date('Y-m-d'),
+        'gender' => $user['gender'] ?? 'Male',
+        'dob' => $user['date_of_birth'] ?? '',
+        'lastDonation' => $user['last_donation'] ?? date('Y-m-d'),
         'willingToDonate' => (bool) ($user['willing_to_donate'] ?? true),
         'profileImage' => $photo
     ]);

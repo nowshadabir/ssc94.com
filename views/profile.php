@@ -1372,15 +1372,35 @@ try {
                         <label class="form-label">Mother's Name</label>
                         <input type="text" id="inputMotherName" class="form-control">
                     </div>
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <select id="inputGender" class="form-control">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" id="inputDob" class="form-control">
+                    </div>
                     <div class="form-group col-span-2">
                         <label class="form-label">Present Address *</label>
                         <input type="text" id="inputCurrentLocation" class="form-control"
                             placeholder="Current living area">
                     </div>
-                    <div class="form-group col-span-2">
+                    <div class="form-group">
                         <label class="form-label">Permanent Address *</label>
                         <input type="text" id="inputPermanentAddress" class="form-control"
                             placeholder="Village, Upozilla, Zilla">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">LinkedIn Profile URL</label>
+                        <input type="url" id="inputLinkedin" class="form-control" placeholder="https://linkedin.com/in/...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Facebook Profile URL</label>
+                        <input type="url" id="inputFacebook" class="form-control" placeholder="https://facebook.com/...">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Home District *</label>
@@ -1421,6 +1441,8 @@ try {
             schoolName: 'Not specified', zilla: 'Not specified',
             upozilla: 'Not specified', fatherName: '', motherName: '',
             permanentAddress: '',
+            gender: 'Male', dob: '',
+            linkedin: '', facebook: '',
             lastDonation: new Date().toISOString().slice(0, 10),
             willingToDonate: true,
             profileImage: 'https://i.pravatar.cc/300?u=<?php echo $userId; ?>'
@@ -1577,6 +1599,10 @@ try {
             document.getElementById('inputUpozilla').value = userData.upozilla;
             document.getElementById('inputFatherName').value = userData.fatherName;
             document.getElementById('inputMotherName').value = userData.motherName;
+            document.getElementById('inputGender').value = userData.gender || 'Male';
+            document.getElementById('inputDob').value = userData.dob || '';
+            document.getElementById('inputLinkedin').value = userData.linkedin || '';
+            document.getElementById('inputFacebook').value = userData.facebook || '';
             document.getElementById('inputPermanentAddress').value = userData.permanentAddress;
             document.getElementById('inputLastDonation').value = userData.lastDonation;
 
@@ -1623,6 +1649,10 @@ try {
             formData.append('upozilla', upozilla);
             formData.append('father_name', document.getElementById('inputFatherName').value.trim());
             formData.append('mother_name', document.getElementById('inputMotherName').value.trim());
+            formData.append('gender', document.getElementById('inputGender').value);
+            formData.append('dob', document.getElementById('inputDob').value);
+            formData.append('linkedin', document.getElementById('inputLinkedin').value.trim());
+            formData.append('facebook', document.getElementById('inputFacebook').value.trim());
             formData.append('permanent_address', permanentAddress);
             formData.append('last_donation_date', document.getElementById('inputLastDonation').value);
             formData.append('willing_to_donate', document.getElementById('bloodAvailability').value);

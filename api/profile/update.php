@@ -20,6 +20,8 @@ $mobile = sanitize($_POST['mobile'] ?? '');
 $job = sanitize($_POST['job'] ?? '');
 $institute = sanitize($_POST['institute'] ?? '');
 $currentLocation = sanitize($_POST['current_location'] ?? '');
+$linkedin = sanitize($_POST['linkedin'] ?? '');
+$facebook = sanitize($_POST['facebook'] ?? '');
 $bloodGroup = sanitize($_POST['blood_group'] ?? '');
 $schoolName = sanitize($_POST['school_name'] ?? '');
 $zilla = sanitize($_POST['zilla'] ?? '');
@@ -27,6 +29,8 @@ $upozilla = sanitize($_POST['upozilla'] ?? '');
 $fatherName = sanitize($_POST['father_name'] ?? '');
 $motherName = sanitize($_POST['mother_name'] ?? '');
 $permanentAddress = sanitize($_POST['permanent_address'] ?? '');
+$gender = sanitize($_POST['gender'] ?? 'Male');
+$dob = sanitize($_POST['dob'] ?? '');
 $lastDonation = sanitize($_POST['last_donation_date'] ?? '');
 $willingToDonate = isset($_POST['willing_to_donate']) && $_POST['willing_to_donate'] === '1' ? 1 : 0;
 
@@ -59,18 +63,6 @@ try {
         $photoPath = $uploadResult['filename'];
     }
 
-    $personalInfoColsStmt = $conn->prepare("
-        SELECT COLUMN_NAME
-        FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_SCHEMA = DATABASE()
-          AND TABLE_NAME = 'user_personal_info'
-          AND COLUMN_NAME IN ('last_donation_date', 'willing_to_donate')
-    ");
-    $personalInfoColsStmt->execute();
-    $personalInfoCols = $personalInfoColsStmt->fetchAll(PDO::FETCH_COLUMN);
-    $hasLastDonation = in_array('last_donation_date', $personalInfoCols, true);
-    $hasWillingToDonate = in_array('willing_to_donate', $personalInfoCols, true);
-
     $conn->beginTransaction();
 
     if ($photoPath) {
@@ -83,20 +75,18 @@ try {
 
     $stmt = $conn->prepare("SELECT info_id FROM user_personal_info WHERE user_id = ? LIMIT 1");
     $stmt->execute([$userId]);
-    $personalExists = (bool)$stmt->fetchColumn();
+    $personalExists = (bool) $stmt->fetchColumn();
 
     $personalFields = [
         'father_name' => $fatherName,
         'mother_name' => $motherName,
         'blood_group' => $bloodGroup,
         'permanent_address' => $permanentAddress,
+        'date_of_birth' => !empty($dob) ? $dob : null,
+        'gender' => $gender,
+        'last_donation' => !empty($lastDonation) ? $lastDonation : null,
+        'willing_to_donate' => $willingToDonate
     ];
-    if ($hasLastDonation) {
-        $personalFields['last_donation_date'] = $lastDonation ?: null;
-    }
-    if ($hasWillingToDonate) {
-        $personalFields['willing_to_donate'] = $willingToDonate;
-    }
 
     if ($personalExists) {
         $setParts = [];
@@ -118,14 +108,14 @@ try {
 
     $stmt = $conn->prepare("SELECT present_id FROM user_present_info WHERE user_id = ? LIMIT 1");
     $stmt->execute([$userId]);
-    $presentExists = (bool)$stmt->fetchColumn();
+    $presentExists = (bool) $stmt->fetchColumn();
 
     if ($presentExists) {
-        $stmt = $conn->prepare("UPDATE user_present_info SET job_business = ?, institute_working_station = ?, current_location = ? WHERE user_id = ?");
-        $stmt->execute([$job, $institute, $currentLocation, $userId]);
+        $stmt = $conn->prepare("UPDATE user_present_info SET job_business = ?, institute_working_station = ?, current_location = ?, linkedin_profile = ?, facebook_profile = ? WHERE user_id = ?");
+        $stmt->execute([$job, $institute, $currentLocation, $linkedin, $facebook, $userId]);
     } else {
-        $stmt = $conn->prepare("INSERT INTO user_present_info (user_id, job_business, institute_working_station, current_location) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$userId, $job, $institute, $currentLocation]);
+        $stmt = $conn->prepare("INSERT INTO user_present_info (user_id, job_business, institute_working_station, current_location, linkedin_profile, facebook_profile) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$userId, $job, $institute, $currentLocation, $linkedin, $facebook]);
     }
 
     $stmt = $conn->prepare("SELECT school_id, batch_year FROM user_school_info WHERE user_id = ? LIMIT 1");
@@ -151,12 +141,17 @@ try {
     }
 
     jsonResponse(true, 'Profile updated', [
+        'id' => $userId,
+        'memberId' => $_SESSION['user_code'] ?? 'N/A',
+        'balance' => $_SESSION['balance'] ?? '0.00',
         'name' => $name,
         'email' => $email,
         'mobile' => $mobile,
         'job' => $job,
         'institute' => $institute,
         'currentLocation' => $currentLocation,
+        'linkedin' => $linkedin,
+        'facebook' => $facebook,
         'bloodGroup' => $bloodGroup,
         'schoolName' => $schoolName,
         'zilla' => $zilla,
@@ -164,8 +159,10 @@ try {
         'fatherName' => $fatherName,
         'motherName' => $motherName,
         'permanentAddress' => $permanentAddress,
+        'gender' => $gender,
+        'dob' => $dob,
         'lastDonation' => $lastDonation,
-        'willingToDonate' => (bool)$willingToDonate,
+        'willingToDonate' => (bool) $willingToDonate,
         'profileImage' => $profilePhoto ?: ('https://i.pravatar.cc/300?u=' . $userId)
     ]);
 } catch (Exception $e) {
