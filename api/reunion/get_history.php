@@ -21,7 +21,7 @@ try {
     $stmt = $conn->prepare("
         SELECT 
             r.reunion_id, r.title, r.reunion_date, r.venue, r.status,
-            rr.registration_id, rr.payment_status
+            rr.reg_id, rr.payment_status
         FROM reunions r
         LEFT JOIN reunion_registrations rr ON r.reunion_id = rr.reunion_id AND rr.user_id = ?
         WHERE r.status = 'completed' OR r.reunion_date < CURDATE()

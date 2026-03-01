@@ -1396,11 +1396,13 @@ try {
                     </div>
                     <div class="form-group">
                         <label class="form-label">LinkedIn Profile URL</label>
-                        <input type="url" id="inputLinkedin" class="form-control" placeholder="https://linkedin.com/in/...">
+                        <input type="url" id="inputLinkedin" class="form-control"
+                            placeholder="https://linkedin.com/in/...">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Facebook Profile URL</label>
-                        <input type="url" id="inputFacebook" class="form-control" placeholder="https://facebook.com/...">
+                        <input type="url" id="inputFacebook" class="form-control"
+                            placeholder="https://facebook.com/...">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Home District *</label>
@@ -1454,24 +1456,24 @@ try {
         }
 
         function loadUserData() {
-            setElText('displayName', userData.name);
+            setElText('displayName', userData.name || 'User');
             setElText('displayMemberId', '#' + (userData.memberId || '000000'));
-            setElText('displayBalance', parseFloat(userData.balance).toFixed(2));
-            setElText('navProfileName', userData.name.split(' ')[0]);
-            setElText('displayJob', userData.job);
-            setElText('displayProfessionInfo', userData.job);
-            setElText('displayInstitute', userData.institute);
-            setElText('displayCompanyInfo', userData.institute);
-            setElText('displayLocation', userData.currentLocation.split(',')[0]);
-            setElText('displayBloodGroupInfo', userData.bloodGroup);
-            setElText('displaySchool', userData.schoolName);
-            setElText('displayZilla', userData.zilla);
-            setElText('displayUpozilla', userData.upozilla);
+            setElText('displayBalance', parseFloat(userData.balance || 0).toFixed(2));
+            setElText('navProfileName', (userData.name || 'User').split(' ')[0]);
+            setElText('displayJob', userData.job || 'Not specified');
+            setElText('displayProfessionInfo', userData.job || 'Not specified');
+            setElText('displayInstitute', userData.institute || 'Not specified');
+            setElText('displayCompanyInfo', userData.institute || 'Not specified');
+            setElText('displayLocation', (userData.currentLocation || 'Not specified').split(',')[0]);
+            setElText('displayBloodGroupInfo', userData.bloodGroup || 'Not specified');
+            setElText('displaySchool', userData.schoolName || 'Not specified');
+            setElText('displayZilla', userData.zilla || 'Not specified');
+            setElText('displayUpozilla', userData.upozilla || 'Not specified');
             setElText('displayFatherName', userData.fatherName || 'Not specified');
             setElText('displayMotherName', userData.motherName || 'Not specified');
             setElText('displayPermanentAddress', userData.permanentAddress || 'Not specified');
-            setElText('displayEmail', userData.email);
-            setElText('displayMobile', userData.mobile);
+            setElText('displayEmail', userData.email || 'Not specified');
+            setElText('displayMobile', userData.mobile || 'Not specified');
 
             const img = document.getElementById('profileImage');
             if (img) {
@@ -1484,8 +1486,12 @@ try {
                 navImg.onerror = () => { navImg.src = '../assets/images/default-avatar.svg'; };
             }
 
-            const d = new Date(userData.lastDonation);
-            setElText('displayLastDonation', d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }));
+            const lastDonationDate = userData.lastDonation ? new Date(userData.lastDonation) : new Date();
+            if (!isNaN(lastDonationDate.getTime())) {
+                setElText('displayLastDonation', lastDonationDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }));
+            } else {
+                setElText('displayLastDonation', 'Not specified');
+            }
 
             const sel = document.getElementById('bloodAvailability');
             if (sel) { sel.value = userData.willingToDonate ? '1' : '0'; toggleDonationStatus(); }

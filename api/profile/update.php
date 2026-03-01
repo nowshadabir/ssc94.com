@@ -34,8 +34,8 @@ $dob = sanitize($_POST['dob'] ?? '');
 $lastDonation = sanitize($_POST['last_donation_date'] ?? '');
 $willingToDonate = isset($_POST['willing_to_donate']) && $_POST['willing_to_donate'] === '1' ? 1 : 0;
 
-if (empty($name) || empty($email) || empty($mobile) || empty($job) || empty($institute) || empty($currentLocation) || empty($bloodGroup) || empty($schoolName) || empty($zilla) || empty($upozilla) || empty($permanentAddress)) {
-    jsonResponse(false, 'Please fill in all required fields');
+if (empty($name) || empty($email) || empty($mobile)) {
+    jsonResponse(false, 'Please provide Name, Email and Mobile.');
 }
 
 if (!validateEmail($email)) {
@@ -80,7 +80,7 @@ try {
     $personalFields = [
         'father_name' => $fatherName,
         'mother_name' => $motherName,
-        'blood_group' => $bloodGroup,
+        'blood_group' => !empty($bloodGroup) ? $bloodGroup : 'O+',
         'permanent_address' => $permanentAddress,
         'date_of_birth' => !empty($dob) ? $dob : null,
         'gender' => $gender,
@@ -133,17 +133,25 @@ try {
 
     $conn->commit();
 
-    $profilePhoto = $photoPath ?? null;
-    if (!$profilePhoto) {
-        $stmt = $conn->prepare("SELECT profile_photo FROM users WHERE user_id = ? LIMIT 1");
-        $stmt->execute([$userId]);
-        $profilePhoto = $stmt->fetchColumn();
+    // Fetch latest user data for response
+    $stmt = $conn->prepare("SELECT user_code, balance, profile_photo FROM users WHERE user_id = ? LIMIT 1");
+    $stmt->execute([$userId]);
+    $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $photo = $userRow['profile_photo'] ?? '';
+    if (empty($photo)) {
+        $photo = 'https://i.pravatar.cc/300?u=' . $userId;
+    } else {
+        $isHttp = strpos($photo, 'http://') === 0 || strpos($photo, 'https://') === 0;
+        if (!$isHttp) {
+            $photo = '../assets/uploads/profiles/' . $photo;
+        }
     }
 
     jsonResponse(true, 'Profile updated', [
         'id' => $userId,
-        'memberId' => $_SESSION['user_code'] ?? 'N/A',
-        'balance' => $_SESSION['balance'] ?? '0.00',
+        'memberId' => $userRow['user_code'] ?? 'N/A',
+        'balance' => $userRow['balance'] ?? '0.00',
         'name' => $name,
         'email' => $email,
         'mobile' => $mobile,
@@ -163,7 +171,7 @@ try {
         'dob' => $dob,
         'lastDonation' => $lastDonation,
         'willingToDonate' => (bool) $willingToDonate,
-        'profileImage' => $profilePhoto ?: ('https://i.pravatar.cc/300?u=' . $userId)
+        'profileImage' => $photo
     ]);
 } catch (Exception $e) {
     if (isset($conn) && $conn->inTransaction()) {
