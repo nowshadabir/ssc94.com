@@ -84,7 +84,7 @@ try {
         'permanent_address' => $permanentAddress,
         'date_of_birth' => !empty($dob) ? $dob : null,
         'gender' => $gender,
-        'last_donation' => !empty($lastDonation) ? $lastDonation : null,
+        'last_donation_date' => !empty($lastDonation) ? $lastDonation : null,
         'willing_to_donate' => $willingToDonate
     ];
 

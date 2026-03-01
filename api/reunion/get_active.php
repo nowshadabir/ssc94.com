@@ -21,7 +21,7 @@ try {
         $registration = null;
         if (isset($_SESSION['user_id'])) {
             $stmt = $conn->prepare("
-                SELECT ticket_number, qr_code, payment_status, tshirt_size, guest_count
+                SELECT ticket_number, qr_code_data, payment_status, tshirt_size, guest_count
                 FROM reunion_registrations 
                 WHERE reunion_id = ? AND user_id = ? AND payment_status = 'completed'
                 LIMIT 1

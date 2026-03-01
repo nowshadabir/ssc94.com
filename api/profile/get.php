@@ -33,7 +33,7 @@ try {
             pi.permanent_address,
             pi.date_of_birth,
             pi.gender,
-            pi.last_donation,
+            pi.last_donation_date as last_donation,
             pi.willing_to_donate,
             pr.job_business,
             pr.institute_working_station,
