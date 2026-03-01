@@ -316,8 +316,8 @@ $pageSubtitle = "Monitor new member signups and referrals";
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-2">
-                            <code class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded-lg font-mono text-[10px] font-extrabold border border-slate-200/50">${user.user_id}</code>
-                            <button onclick="copyReferralCode('${user.user_id}')" class="text-slate-300 hover:text-slate-600 transition" title="Copy ID">
+                            <code class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded-lg font-mono text-[10px] font-extrabold border border-slate-200/50">${user.user_code || user.user_id}</code>
+                            <button onclick="copyReferralCode('${user.user_code || user.user_id}')" class="text-slate-300 hover:text-slate-600 transition" title="Copy Member ID">
                                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
@@ -361,6 +361,18 @@ $pageSubtitle = "Monitor new member signups and referrals";
             lucide.createIcons();
         }
 
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-8 right-8 px-6 py-3 rounded-2xl text-[11px] font-extrabold shadow-2xl z-50 animate-bounce uppercase tracking-widest border border-white/10 backdrop-blur-md ${type === 'success' ? 'bg-slate-900 text-white' : 'bg-red-600 text-white'}`;
+            toast.innerHTML = (type === 'success' ? '✓ ' : '✗ ') + message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('animate-bounce');
+                toast.classList.add('opacity-0', 'translate-y-4', 'transition-all', 'duration-500');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
         function filterUsers() {
             const searchTerm = document.getElementById('search').value.toLowerCase();
             const statusFilter = document.getElementById('status-filter').value;
@@ -371,7 +383,8 @@ $pageSubtitle = "Monitor new member signups and referrals";
                     user.full_name.toLowerCase().includes(searchTerm) ||
                     user.mobile.includes(searchTerm) ||
                     user.email.toLowerCase().includes(searchTerm) ||
-                    String(user.user_id).includes(searchTerm);
+                    String(user.user_id).includes(searchTerm) ||
+                    (user.user_code && user.user_code.includes(searchTerm));
 
                 const matchesStatus = !statusFilter || user.status === statusFilter;
                 let matchesReferral = true;
@@ -385,11 +398,7 @@ $pageSubtitle = "Monitor new member signups and referrals";
 
         function copyReferralCode(code) {
             navigator.clipboard.writeText(code).then(() => {
-                const toast = document.createElement('div');
-                toast.className = 'fixed bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-2.5 rounded-2xl text-[10px] font-extrabold uppercase tracking-widest shadow-2xl z-50 animate-bounce';
-                toast.textContent = '✓ Copied ID: ' + code;
-                document.body.appendChild(toast);
-                setTimeout(() => toast.remove(), 2500);
+                showToast('Copied Member ID: ' + code);
             });
         }
 
@@ -435,6 +444,7 @@ $pageSubtitle = "Monitor new member signups and referrals";
 
                     document.getElementById('userDetailsModal').classList.remove('hidden');
                     document.getElementById('userDetailsModal').classList.add('flex');
+                    lucide.createIcons(); // Refresh icons inside modal
                 } else {
                     showToast('Failed to load details', 'error');
                 }

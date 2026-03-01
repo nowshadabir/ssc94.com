@@ -22,6 +22,7 @@ try {
             u.mobile,
             u.email,
             u.profile_photo,
+            u.user_code,
             u.referral_code,
             u.referred_by,
             u.status,
