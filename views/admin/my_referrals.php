@@ -26,26 +26,35 @@ $pageSubtitle = "Users who registered using your Member ID";
         <?php include 'layout/header.php'; ?>
 
         <div class="p-6 lg:p-8 space-y-8 overflow-y-auto">
-            <!-- Header Stats -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center">
-                        <i data-lucide="gift" class="w-6 h-6"></i>
+            <!-- Referral Lookup Form -->
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 lg:p-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div class="flex-1 max-w-md">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Lookup by Member ID</label>
+                        <div class="flex gap-2">
+                            <div class="relative flex-1">
+                                <i data-lucide="search" class="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400"></i>
+                                <input type="text" id="member-lookup-input" placeholder="Enter 6-digit Member ID..." 
+                                    class="w-full h-11 pl-11 pr-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900/10 transition">
+                            </div>
+                            <button onclick="loadReferrals()" class="h-11 px-6 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-black transition shadow-sm uppercase tracking-widest flex items-center gap-2">
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i> Explore
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight uppercase">My Referral Network</h2>
-                        <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Your Member ID: <span id="admin-code" class="text-indigo-600">Loading...</span></p>
-                    </div>
-                </div>
-                <div class="bg-white border border-slate-100 rounded-2xl p-4 px-6 flex items-center gap-6 shadow-sm">
-                    <div class="text-center">
-                        <p class="text-2xl font-black text-slate-900 leading-none" id="stat-total">0</p>
-                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Total Referrals</p>
-                    </div>
-                    <div class="w-px h-8 bg-slate-100"></div>
-                    <div class="text-center">
-                        <p class="text-2xl font-black text-emerald-600 leading-none" id="stat-active">0</p>
-                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Active Members</p>
+
+                    <div id="referrer-info" class="hidden flex items-center gap-4 bg-indigo-50/50 border border-indigo-100/50 rounded-2xl p-4 pr-6 shrink-0">
+                        <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">
+                            <i data-lucide="user-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[9px] text-indigo-400 font-black uppercase tracking-widest leading-none mb-1">Results for</p>
+                            <h3 id="referrer-name" class="text-sm font-extrabold text-slate-900 uppercase tracking-tight">-</h3>
+                        </div>
+                        <div class="ml-4 pl-4 border-l border-indigo-200/30 text-center">
+                            <p id="stat-total" class="text-xl font-black text-slate-900 leading-none">0</p>
+                            <p class="text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-1">Referrals</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -92,22 +101,51 @@ $pageSubtitle = "Users who registered using your Member ID";
     <?php include 'layout/scripts.php'; ?>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => loadReferrals());
+        document.addEventListener('DOMContentLoaded', () => {
+             // Add Enter key support
+            document.getElementById('member-lookup-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') loadReferrals();
+            });
+        });
 
         async function loadReferrals() {
+            const memberId = document.getElementById('member-lookup-input').value.trim();
+            if (!memberId) {
+                showToast('Please enter a Member ID', 'error');
+                return;
+            }
+
+            const tbody = document.getElementById('referrals-table-body');
+            const noResults = document.getElementById('no-results');
+            const referrerInfo = document.getElementById('referrer-info');
+            
+            // Show loading state
+            tbody.innerHTML = `
+                <tr id="loading-row">
+                    <td colspan="6" class="px-6 py-12 text-center text-xs">
+                        <div class="flex items-center justify-center gap-3">
+                            <i data-lucide="loader-2" class="w-6 h-6 text-slate-300 animate-spin"></i>
+                            <span class="text-slate-400 italic font-medium">Fetching referrals...</span>
+                        </div>
+                    </td>
+                </tr>`;
+            lucide.createIcons();
+            noResults.classList.add('hidden');
+            referrerInfo.classList.add('hidden');
+
             try {
-                const res = await fetch('../../api/admin/get_my_referrals.php');
+                const res = await fetch(`../../api/admin/get_my_referrals.php?member_id=${encodeURIComponent(memberId)}`);
                 const data = await res.json();
                 
                 if (data.success) {
-                    document.getElementById('admin-code').textContent = data.admin_member_id || 'N/A';
-                    displayReferrals(data.users);
-                    // Update stats
-                    const activeCount = data.users.filter(u => u.status === 'active').length;
+                    document.getElementById('referrer-name').textContent = data.referrer_name;
                     document.getElementById('stat-total').textContent = data.users.length;
-                    document.getElementById('stat-active').textContent = activeCount;
+                    referrerInfo.classList.remove('hidden');
+                    displayReferrals(data.users);
                 } else {
-                    showError(data.message || 'Failed to load referrals');
+                    tbody.innerHTML = '';
+                    noResults.classList.remove('hidden');
+                    showToast(data.message || 'No member found', 'error');
                 }
             } catch (error) {
                 console.error('Error:', error);

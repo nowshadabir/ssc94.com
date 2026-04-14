@@ -14,34 +14,25 @@ try {
     $db = new Database();
     $conn = $db->getConnection();
 
-    // 1. Get current admin details from DB
-    $adminId = $_SESSION['admin_id'];
-    $stmt = $conn->prepare("SELECT email FROM admins WHERE admin_id = ?");
-    $stmt->execute([$adminId]);
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+    // 1. Get member ID from request
+    $lookupMemberId = sanitize($_GET['member_id'] ?? '');
 
-    if (!$admin) {
-        jsonResponse(false, 'Admin details not found');
+    if (empty($lookupMemberId)) {
+        jsonResponse(false, 'Please provide a Member ID to look up.');
     }
 
-    // 2. Find matching user in users table
-    $stmt = $conn->prepare("SELECT user_id, user_code FROM users WHERE email = ? LIMIT 1");
-    $stmt->execute([$admin['email']]);
-    $userRecord = $stmt->fetch(PDO::FETCH_ASSOC);
+    // 2. Find matching user in users table to get their user_id
+    $stmt = $conn->prepare("SELECT user_id, full_name, user_code FROM users WHERE user_code = ? OR user_id = ? LIMIT 1");
+    $stmt->execute([$lookupMemberId, $lookupMemberId]);
+    $referrerRecord = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$userRecord) {
-        // If no matching user, return empty list with a message
-        echo json_encode([
-            'success' => true,
-            'users' => [],
-            'message' => 'No matching membership account found for this admin email.',
-            'admin_member_id' => 'N/A'
-        ]);
-        exit();
+    if (!$referrerRecord) {
+        jsonResponse(false, 'No user found with the provided Member ID.');
     }
 
-    $referrerUserId = $userRecord['user_id'];
-    $adminMemberId = $userRecord['user_code'];
+    $referrerUserId = $referrerRecord['user_id'];
+    $referrerName = $referrerRecord['full_name'];
+    $referrerCode = $referrerRecord['user_code'];
 
     // 3. Get all users referred by this admin's user account
     $query = "
@@ -77,7 +68,8 @@ try {
     echo json_encode([
         'success' => true,
         'users' => $referredUsers,
-        'admin_member_id' => $adminMemberId,
+        'referrer_name' => $referrerName,
+        'referrer_code' => $referrerCode,
         'count' => count($referredUsers)
     ]);
 

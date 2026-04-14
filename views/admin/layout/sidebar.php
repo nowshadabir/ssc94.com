@@ -18,7 +18,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
         <?php if (hasPermission('view_members')): ?>
             <?php renderNavLink('user_registrations.php', 'user-plus', 'User Registrations'); ?>
-            <?php renderNavLink('my_referrals.php', 'gift', 'My Referrals'); ?>
+            <?php renderNavLink('my_referrals.php', 'gift', 'Referral Lookup'); ?>
         <?php endif; ?>
 
         <?php if (hasPermission('view_payments')): ?>
