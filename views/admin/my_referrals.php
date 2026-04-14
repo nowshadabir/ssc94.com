@@ -30,26 +30,34 @@ $pageSubtitle = "Users who registered using your Member ID";
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 lg:p-8">
                 <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div class="flex-1 max-w-md">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Lookup by Member ID</label>
+                        <label
+                            class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">Lookup
+                            by Member ID</label>
                         <div class="flex gap-2">
                             <div class="relative flex-1">
                                 <i data-lucide="search" class="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400"></i>
-                                <input type="text" id="member-lookup-input" placeholder="Enter 6-digit Member ID..." 
+                                <input type="text" id="member-lookup-input" placeholder="Enter 6-digit Member ID..."
                                     class="w-full h-11 pl-11 pr-4 bg-slate-50 border border-slate-100 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900/10 transition">
                             </div>
-                            <button onclick="loadReferrals()" class="h-11 px-6 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-black transition shadow-sm uppercase tracking-widest flex items-center gap-2">
+                            <button onclick="loadReferrals()"
+                                class="h-11 px-6 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-black transition shadow-sm uppercase tracking-widest flex items-center gap-2">
                                 <i data-lucide="arrow-right" class="w-4 h-4"></i> Explore
                             </button>
                         </div>
                     </div>
 
-                    <div id="referrer-info" class="hidden flex items-center gap-4 bg-indigo-50/50 border border-indigo-100/50 rounded-2xl p-4 pr-6 shrink-0">
-                        <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">
+                    <div id="referrer-info"
+                        class="hidden flex items-center gap-4 bg-indigo-50/50 border border-indigo-100/50 rounded-2xl p-4 pr-6 shrink-0">
+                        <div
+                            class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">
                             <i data-lucide="user-check" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <p class="text-[9px] text-indigo-400 font-black uppercase tracking-widest leading-none mb-1">Results for</p>
-                            <h3 id="referrer-name" class="text-sm font-extrabold text-slate-900 uppercase tracking-tight">-</h3>
+                            <p
+                                class="text-[9px] text-indigo-400 font-black uppercase tracking-widest leading-none mb-1">
+                                Results for</p>
+                            <h3 id="referrer-name"
+                                class="text-sm font-extrabold text-slate-900 uppercase tracking-tight">-</h3>
                         </div>
                         <div class="ml-4 pl-4 border-l border-indigo-200/30 text-center">
                             <p id="stat-total" class="text-xl font-black text-slate-900 leading-none">0</p>
@@ -63,13 +71,13 @@ $pageSubtitle = "Users who registered using your Member ID";
             <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden text-xs">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
-                        <thead class="bg-slate-50 text-[10px] text-slate-400 font-bold uppercase tracking-widest border-b border-slate-100">
+                        <thead
+                            class="bg-slate-50 text-[10px] text-slate-400 font-bold uppercase tracking-widest border-b border-slate-100">
                             <tr>
                                 <th class="px-6 py-4">Referred Member</th>
                                 <th class="px-6 py-4">Contact Info</th>
                                 <th class="px-6 py-4">Member ID</th>
                                 <th class="px-6 py-4">Status</th>
-                                <th class="px-6 py-4">Payment</th>
                                 <th class="px-6 py-4">Joined Date</th>
                             </tr>
                         </thead>
@@ -78,7 +86,8 @@ $pageSubtitle = "Users who registered using your Member ID";
                                 <td colspan="6" class="px-6 py-12 text-center text-xs">
                                     <div class="flex items-center justify-center gap-3">
                                         <i data-lucide="loader-2" class="w-6 h-6 text-slate-300 animate-spin"></i>
-                                        <span class="text-slate-400 italic font-medium">Fetching your referrals...</span>
+                                        <span class="text-slate-400 italic font-medium">Fetching your
+                                            referrals...</span>
                                     </div>
                                 </td>
                             </tr>
@@ -88,11 +97,13 @@ $pageSubtitle = "Users who registered using your Member ID";
             </div>
 
             <div id="no-results" class="hidden bg-white rounded-2xl border border-slate-100 p-16 text-center shadow-sm">
-                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                <div
+                    class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
                     <i data-lucide="users" class="w-10 h-10 text-slate-200"></i>
                 </div>
                 <h3 class="text-lg font-extrabold text-slate-600 mb-1 uppercase tracking-tight">No referrals yet</h3>
-                <p class="text-sm text-slate-400 font-medium">When users register using your Member ID, they will appear here.</p>
+                <p class="text-sm text-slate-400 font-medium">When users register using your Member ID, they will appear
+                    here.</p>
             </div>
         </div>
     </main>
@@ -102,7 +113,7 @@ $pageSubtitle = "Users who registered using your Member ID";
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-             // Add Enter key support
+            // Add Enter key support
             document.getElementById('member-lookup-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') loadReferrals();
             });
@@ -118,7 +129,7 @@ $pageSubtitle = "Users who registered using your Member ID";
             const tbody = document.getElementById('referrals-table-body');
             const noResults = document.getElementById('no-results');
             const referrerInfo = document.getElementById('referrer-info');
-            
+
             // Show loading state
             tbody.innerHTML = `
                 <tr id="loading-row">
@@ -136,7 +147,7 @@ $pageSubtitle = "Users who registered using your Member ID";
             try {
                 const res = await fetch(`../../api/admin/get_my_referrals.php?member_id=${encodeURIComponent(memberId)}`);
                 const data = await res.json();
-                
+
                 if (data.success) {
                     document.getElementById('referrer-name').textContent = data.referrer_name;
                     document.getElementById('stat-total').textContent = data.users.length;
@@ -159,7 +170,7 @@ $pageSubtitle = "Users who registered using your Member ID";
             const noResults = document.getElementById('no-results');
 
             loadingRow.classList.add('hidden');
-            
+
             if (users.length === 0) {
                 tbody.innerHTML = '';
                 noResults.classList.remove('hidden');
@@ -192,16 +203,10 @@ $pageSubtitle = "Users who registered using your Member ID";
                             ${user.status}
                         </span>
                     </td>
-                    <td class="px-6 py-4">
-                        <div class="text-[10px]">
-                            <div class="font-bold text-slate-900 uppercase tracking-widest">${user.payment_status || 'UNPAID'}</div>
-                            ${user.payment_amount ? `<div class="text-slate-400 font-bold mt-0.5">৳${user.payment_amount}</div>` : ''}
-                        </div>
-                    </td>
                     <td class="px-6 py-4 text-[10px] text-slate-500 font-bold uppercase tracking-tighter">${formatDate(user.created_at)}</td>
                 </tr>
             `).join('');
-            
+
             lucide.createIcons();
         }
 
@@ -216,4 +221,5 @@ $pageSubtitle = "Users who registered using your Member ID";
         }
     </script>
 </body>
+
 </html>
