@@ -19,11 +19,19 @@ $mobile = sanitize($_POST['mobile'] ?? '');
 $password = $_POST['password'] ?? '';
 $confirmPassword = $_POST['confirm_password'] ?? '';
 $role = sanitize($_POST['role'] ?? 'admin');
+$registrationKey = $_POST['registration_key'] ?? '';
+
 
 // Basic Validation
-if (empty($fullName) || empty($email) || empty($mobile) || empty($password)) {
+if (empty($fullName) || empty($email) || empty($mobile) || empty($password) || empty($registrationKey)) {
     jsonResponse(false, 'All required fields must be filled');
 }
+
+// Verify Registration Key
+if ($registrationKey !== env('ADMIN_REGISTRATION_KEY')) {
+    jsonResponse(false, 'Invalid registration key. You are not authorized to create an admin account.');
+}
+
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     jsonResponse(false, 'Invalid email format');
