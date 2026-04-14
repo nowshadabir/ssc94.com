@@ -5,7 +5,7 @@
  */
 require_once '../../config/config.php';
 
-requireAdmin();
+requireAdmin('view_referrals');
 
 $adminName = $_SESSION['admin_name'] ?? 'Administrator';
 $pageTitle = "My Referrals";

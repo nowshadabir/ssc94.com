@@ -191,6 +191,7 @@ $pageSubtitle = "Control permissions and monitor other admin users";
                             'Members' => [
                                 ['key' => 'view_members', 'icon' => 'users', 'color' => 'indigo', 'label' => 'View Members', 'desc' => 'Registration list access'],
                                 ['key' => 'mark_as_paid', 'icon' => 'check-circle', 'color' => 'emerald', 'label' => 'Mark as Paid', 'desc' => 'Approve member signups'],
+                                ['key' => 'view_referrals', 'icon' => 'gift', 'color' => 'purple', 'label' => 'View Referrals', 'desc' => 'Referral lookup tool access'],
                             ],
                             'Reunions' => [
                                 ['key' => 'view_reunions', 'icon' => 'party-popper', 'color' => 'amber', 'label' => 'View Reunions', 'desc' => 'See list & attendees'],
@@ -343,7 +344,8 @@ $pageSubtitle = "Control permissions and monitor other admin users";
                 'edit_reunions': 'Edit Reunion',
                 'delete_reunions': 'Delete Reunion',
                 'view_payments': 'View Payments',
-                'manage_payments': 'Manage Payments'
+                'manage_payments': 'Manage Payments',
+                'view_referrals': 'View Referrals'
             };
             return map[key] || key;
         }
@@ -355,7 +357,8 @@ $pageSubtitle = "Control permissions and monitor other admin users";
                 'edit_reunions': '✍️',
                 'delete_reunions': '⚠️',
                 'view_payments': '👁️',
-                'manage_payments': '⚙️'
+                'manage_payments': '⚙️',
+                'view_referrals': '🎁'
             };
             return map[key] || '🔑';
         }

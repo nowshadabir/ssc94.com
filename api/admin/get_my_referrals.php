@@ -9,7 +9,7 @@ header('Content-Type: application/json');
 require_once '../../config/config.php';
 
 try {
-    checkAdminAction(); // Basic admin check
+    checkAdminAction('view_referrals'); // Permission check
     
     $db = new Database();
     $conn = $db->getConnection();
